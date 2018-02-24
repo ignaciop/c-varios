@@ -1,18 +1,19 @@
 #include <stdio.h>
 
 int main(void) {
-	double i, n, sum;
+	double n, sum = 0;
 	
-	printf("Enter n: ");
+	printf("This program sums a series of integers.\n");
+	printf("Enter integers (0 to terminate): ");
+	
 	scanf("%lf", &n);
 	
-	sum = 0.0;
-	
-	for (i = 1; i <= n; i++) {
-		sum += i;
+	while (n != 0) {
+		sum += n;
+		scanf("%lf", &n);
 	}
 	
-	printf("Sum: %.2lf\n",sum);
+	printf("The sum is: %lf\n", sum);
 	
 	return 0;
 }
