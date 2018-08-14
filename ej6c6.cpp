@@ -1,4 +1,5 @@
 #include <iostream>
+#include <array>
 
 enum CardSuit {
 	SUIT_CLUB,
@@ -58,10 +59,8 @@ void printCard(const Card &card) {
 }
 
 void printDeck(const std::array<Card, 52> &deck) {
-	int size = deck.length();
-	
-	for (int card = 0; card < size; ++i) {
-		printCard(deck[card]);
+	for (const auto &card : deck) {
+		printCard(card);
 		std::cout << ' ';
 	}
 	
