@@ -1,5 +1,7 @@
 #include <iostream>
 #include <array>
+#include <ctime>
+#include <cstdlib>
 
 enum CardSuit {
 	SUIT_CLUB,
@@ -67,6 +69,47 @@ void printDeck(const std::array<Card, 52> &deck) {
 	std::cout << '\n';
 }
 
+void swapCard(Card &a, Card &b) {
+	Card temp = a;
+	a = b;
+	b = temp;
+}
+
+int getRandomNumber(int min, int max) {
+	static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
+	
+	return static_cast<int>(rand()*fraction*(max - min + 1) + min);
+}
+
+void shuffleDeck(std::array<Card, 52> &deck) {
+	for (int index = 0; index < 52; ++index) {
+		int swapIndex = getRandomNumber(0, 51);
+		swapCard(deck[index], deck[swapIndex]);
+	}
+}
+
+int getCardValue(Card &card) {
+	switch (card.rank) {
+		case RANK_2: return 2; break;
+		case RANK_3: return 3; break;
+		case RANK_4: return 4; break;
+		case RANK_5: return 5; break;
+		case RANK_6: return 6; break;
+		case RANK_7: return 7; break;
+		case RANK_8: return 8; break;
+		case RANK_9: return 9; break;
+		case RANK_10: return 10; break;
+		case RANK_JACK: return 10; break;
+		case RANK_QUEEN: return 10; break;
+		case RANK_KING: return 10; break;
+		case RANK_ACE: return 11; break;
+		case MAX_RANKS: return 0; break;	
+	}
+	
+	return 0;
+}
+
+
 int main() {
 	std::array<Card, 52> deck;
 	
@@ -80,6 +123,8 @@ int main() {
 		}
 	}
 	
+	printDeck(deck);
+	shuffleDeck(deck);
 	printDeck(deck);
 	
 	return 0;
