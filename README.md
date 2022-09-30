@@ -1,2 +1,2 @@
 # c-varios
-Ejercicios varios en C y c++
+Ejercicios varios en C y C++
