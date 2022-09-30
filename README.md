@@ -1,2 +1,2 @@
 # c-varios
-Ejercicios en C del libro de King
+Ejercicios varios en C y c++
