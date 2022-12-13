@@ -1,13 +1,28 @@
-#ifndef A6_H
-#define A6_H
+#ifndef JOHNNY_MATHLIB_H
+#define JOHNNY_MATHLIB_H
 
 #include <array>
-#include <cmath>
 
-int distance(int i1, int i2);
-float distance(float f1, float f2);
-float distance(std::array<float, 3>& p1, std::array<float, 3>& p2 = {0, 0, 0});
+// Organize the functions inside two namespaces.
+// All of johnny code will be under the johnny namespace, and all the mathlib code
+// will be into the mathlib namespace
+namespace johnny {
+namespace mathlib {
+
+// Overload distance so it is easy to use
+float distance(float a, float b);
+int distance(int a, int b);
+// The point are taken by value because they are small.
+// We define a default value for argument 'b' to be the origin.
+float distance(std::array<float, 3> a, std::array<float, 3> b = {0, 0, 0});
+
 float circumference(float radius);
-float totalDistance(std::array<std::array<float, 3>, 5>& ps);
+
+// The array of locations is big, so we use a reference. Since we do not modify it,
+// we also use const.
+float total_walking_distance(const std::array<std::array<float, 3>, 10>& locations);
+
+}
+}
 
 #endif
