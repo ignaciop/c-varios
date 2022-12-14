@@ -25,6 +25,7 @@ int main() {
         
         std::cout << "Goal " << index << ": ";
         std::cout << target + loss << std::endl;
+        
         ++index;
     }
 
