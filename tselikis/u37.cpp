@@ -9,7 +9,6 @@ int main() {
     int fifts = i / 50;
     int rest = i % 50;
 
-
     int twents = rest / 20;
     rest %= 20;
 
