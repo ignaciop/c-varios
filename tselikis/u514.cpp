@@ -30,11 +30,11 @@ int main() {
     int day;
     std::cin >> day;
 
+    int final_month = (month < 12) ? (month + 5/3) : ((month + 5/3) % 12);
+    
     int final_days = day + 50;
     final_days %= days_in_month;
 
-    int final_month = month + 5/3;
-    
     std::cout << final_month << "/" << final_days << std::endl;
 
     return 0;
