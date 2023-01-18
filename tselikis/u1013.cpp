@@ -11,9 +11,24 @@ int main() {
 
     std::cout << "Enter second string: ";
     std::cin.getline(str2, sizeof(str2));
-    
-    for (int i = 0; i < strlen(str1) ; i++) {
+
+    char *p, *q, *r;
+
+    if (str2 && (q = r = strstr(str1, str2)) != NULL) {
+        int len = strlen(str2);
+
+        while ((r = strstr(p = r + len, str2)) != NULL) {
+            while (p < r) {
+                *q++ = *p++;
+            }
+        }
+
+        while ((*q++ = *p++) != '\0') {
+            continue;
+        }
     }
+
+    std::cout << str1 << std::endl;
 
     return 0;
 }
