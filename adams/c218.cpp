@@ -1,6 +1,6 @@
 #include <iostream>
 
-int strlen(char *p_str);
+int strlen(const char *p_str);
 
 int main() {
     char cstr[255] = {};
@@ -8,14 +8,16 @@ int main() {
     std::cout << "Enter a string: ";
     std::cin.getline(cstr, sizeof(cstr));
 
-    int length = strlen(cstr);
+    char* const p = &cstr[0];
+
+    int length = strlen(p);
 
     std::cout << "String length: " << length << std::endl;
 
     return 0;
 }
 
-int strlen(char *p_str) {
+int strlen(const char *p_str) {
     int length = 0;
 
     while (*p_str != '\0') {
