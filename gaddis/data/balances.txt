@@ -1,0 +1,6 @@
+
+Starting balance            = $100.00
+Ending balance              = $410.83
+Total amount in deposits    = $200.00
+Total amount in withdrawals = $10.00
+Total interest earned       = $120.83

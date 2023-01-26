@@ -48,6 +48,7 @@
         "cstring": "cpp",
         "bitset": "cpp",
         "iomanip": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "fstream": "cpp"
     }
 }
