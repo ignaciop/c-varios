@@ -1,0 +1,6 @@
+Patient type: Inpatient
+Days spent in the hospital:                           100
+Daily rate:                                        $12.50
+Charges for hospital services:                    $3400.00
+Charges for hospital medication:                  $5400.60
+Total charges:                                    $10050.60
