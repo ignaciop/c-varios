@@ -7,16 +7,18 @@ struct CorpData {
     double qtr2_sales;
     double qtr3_sales;
     double qtr4_sales;
+
+    CorpData(std::string inputDivName, double inputQtr1Sales, double inputQtr2Sales, double inputQtr3Sales, double inputQtr4Sales)
+        : div_name(inputDivName), qtr1_sales(inputQtr1Sales), qtr2_sales(inputQtr2Sales), qtr3_sales(inputQtr3Sales), qtr4_sales(inputQtr4Sales) {};
 };
 
-CorpData newCorpData(std::string inputDivName, double inputQtr1Sales, double inputQtr2Sales, double inputQtr3Sales, double inputQtr4Sales);
 void displayCorpData(const std::string &div_name, double &qtr1Sales, double &qtr2Sales, double &qtr3Sales, double &qtr4Sales);
 
 int main() {
-    CorpData north = newCorpData("North", 10, 20, 30, 40);
-    CorpData south = newCorpData("South", 10.1, 20.1, 30.1, 40.1);
-    CorpData east = newCorpData("East", 10.2, 20.2, 30.2, 40.2);
-    CorpData west = newCorpData("West", 10.3, 20.3, 30.3, 40.3);
+    CorpData north("North", 10, 20, 30, 40);
+    CorpData south("South", 10.1, 20.1, 30.1, 40.1);
+    CorpData east("East", 10.2, 20.2, 30.2, 40.2);
+    CorpData west("West", 10.3, 20.3, 30.3, 40.3);
 
     displayCorpData(north.div_name, north.qtr1_sales, north.qtr2_sales, north.qtr3_sales, north.qtr4_sales);
     displayCorpData(south.div_name, south.qtr1_sales, south.qtr2_sales, south.qtr3_sales, south.qtr4_sales);
@@ -24,12 +26,6 @@ int main() {
     displayCorpData(west.div_name, west.qtr1_sales, west.qtr2_sales, west.qtr3_sales, west.qtr4_sales);
 
     return 0;
-}
-
-CorpData newCorpData(std::string inputDivName, double inputQtr1Sales, double inputQtr2Sales, double inputQtr3Sales, double inputQtr4Sales) {
-    CorpData ncd = {inputDivName, inputQtr1Sales, inputQtr2Sales, inputQtr3Sales, inputQtr4Sales};
-
-    return ncd;
 }
 
 void displayCorpData(const std::string &div_name, double &qtr1Sales, double &qtr2Sales, double &qtr3Sales, double &qtr4Sales) {
