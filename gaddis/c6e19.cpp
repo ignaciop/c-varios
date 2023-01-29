@@ -48,6 +48,8 @@ int main() {
 
         prev_pop = p;
     }
+
+    return 0;
 }
 
 int projected_pop(int previous_pop, int movein_pop, int moveout_pop, double birth_rate, double death_rate) {
