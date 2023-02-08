@@ -13,7 +13,7 @@ class Zeller {
         Zeller(const Zeller& zellerCopy);
         ~Zeller();
 
-        void weekday() const;
+        void weekday();
 };
 
 #endif
