@@ -128,23 +128,34 @@ void run_test(void (*func)(), const char* message) {
  * i.e. argv[1] --> number of elements, thus argc - 2 == atoi(argv[1])
  */
 int main(int argc, char** argv) {
-  int num_elements = atoi(argv[1]);
-
-  char* arr[num_elements];
-  for (int i = 0; i < num_elements; i++) {
-    arr[i] = argv[i + 2];
-  }
-
-  reverse_arr(arr, num_elements);
-
-  for (int i = 0; i < num_elements; i++) {
-    printf("%s ", arr[i]);
-  }
-  printf("\n");
-
-  printf("Testing for correctness...\n");
+  if (argc == 1) {
+    printf("Testing for correctness...\n");
   // passes the function test_reverse to run_test
-  run_test(&test_reverse, "Reverse");
+    run_test(&test_reverse, "Reverse");
+  } else if (argc > 1) {
+    int num_elements = atoi(argv[1]);
+
+    char* arr[num_elements];
+  
+    for (int i = 0; i < num_elements; i++) {
+      arr[i] = argv[i + 2];
+    }
+
+    if (argc < 3 || (argc - 2 != atoi(argv[1]))) {
+      perror("the number elements inputted by the user not corresponds to the number of elements to be reversed");
+
+      return 1;
+    }
+
+    reverse_arr(arr, num_elements);
+
+    for (int i = 0; i < num_elements; i++) {
+      printf("%s ", arr[i]);
+    }
+  
+    printf("\n");
+  }
+  
 
   return 0;
 }
