@@ -5,10 +5,10 @@
 
 // struct for a node in a doubly linked list
 typedef struct node {
-  void* data;
+    void* data;
 
-  struct node* next;
-  struct node* prev;
+    struct node* next;
+    struct node* prev;
 } node_t;
 
 // function declarations
