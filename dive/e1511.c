@@ -14,7 +14,7 @@ void string_copy(char dest[], const char source[]) {
     dest[i] = '\0';
 }
 
-int main() {
+int main(void) {
     char dest[100]; // Destination string buffer
     const char source1[] = "Hello, World!";
     const char source2[] = "Custom String Copy Function";
