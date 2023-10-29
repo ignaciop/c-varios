@@ -2,29 +2,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
-  // Creates an integer with value 5
-  // Note: int16_t is a numerical datatype that takes up 2 bytes of memory
-  int16_t x = 5;
+int main(void) {
+    // Creates an integer with value 5
+    // Note: int16_t is a numerical datatype that takes up 2 bytes of memory
+    int16_t x = 5;
 
-  // TODO: allocate an int16_t array of size 4
-  // Hint: C represents arrays as a pointer to the first element
-  // Hint: one malloc call allocates memory for the entire array
-  //       it works because the elements are stored side by side
-  ______ some_array = malloc(______);
-  printf("address of the start of the array: %p\n", some_array);
+    // TODO: allocate an int16_t array of size 4
+    // Hint: C represents arrays as a pointer to the first element
+    // Hint: one malloc call allocates memory for the entire array
+    //       it works because the elements are stored side by side
+    int16_t *some_array = (int16_t *)malloc(4 * sizeof(int16_t));
 
-  // TODO: compute the address of the element at index 2 (0-indexed)
-  ______ ptr_to_idx_2 = ____________;
-  printf("address of index 2: %p\n", ptr_to_idx_2);
+    if (some_array == NULL) {
+		perror("Cannot allocate memory for int8_t array.");
 
-  // TODO: store the value 10 at index 2, using ptr_to_idx_2
-  __________ = 10;
+		return 1;
+	}
 
-  // TODO: print the value at index 2
-  // Hint: this blank should be the same as the previous blank
-  //       please don't hard code 10
-  printf("value at index 2: %d\n", __________);
+    printf("address of the start of the array: %p\n", some_array);
 
-  return 0;
+    // TODO: compute the address of the element at index 2 (0-indexed)
+    int16_t *ptr_to_idx_2 = some_array + 2;
+    printf("address of index 2: %p\n", ptr_to_idx_2);
+
+    // TODO: store the value 10 at index 2, using ptr_to_idx_2
+    *ptr_to_idx_2 = 10;
+
+    // TODO: print the value at index 2
+    // Hint: this blank should be the same as the previous blank
+    //       please don't hard code 10
+    printf("value at index 2: %d\n", *ptr_to_idx_2);
+
+    free(some_array);
+	some_array = NULL;
+
+    return 0;
 }

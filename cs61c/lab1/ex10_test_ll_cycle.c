@@ -4,11 +4,10 @@
 
 int main(void) {
     // DO NOT EDIT ANY OF THE FOLLOWING CODE
-    printf("Running tests...\n\n");
+    printf("%s\n\n", "Running tests...");
 
-    int i;
     node nodes[25]; // enough to run our tests
-    for(i = 0; i < sizeof(nodes)/sizeof(node); i++) {
+    for(int i = 0; i < (int)(sizeof(nodes) / sizeof(node)); i++) {
         nodes[i].next = 0;
         nodes[i].value = 0;
     }
@@ -53,7 +52,7 @@ int main(void) {
     printf("Checking length-zero list for cycles. There should be none, ll_has_cycle says it has %s cycle\n\n", ll_has_cycle(NULL) ? "a" : "no");
     assert(!ll_has_cycle(NULL));
 
-    printf("Congrats, you passed all the test cases!\n");
+    printf("%s\n", "Congrats, you passed all the test cases!");
 
     return 0;
 }
