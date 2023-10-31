@@ -6,21 +6,21 @@
 int main(int argc, char **argv) {
     vector_t *v;
 
-    printf("Calling vector_new()\n");
+    printf("%s\n", "Calling vector_new()");
     v = vector_new();
 
-    printf("Calling vector_delete()\n");
+    printf("%s\n", "Calling vector_delete()");
     vector_delete(v);
 
-    printf("vector_new() again\n");
+    printf("%s\n", "vector_new() again");
     v = vector_new();
 
-    printf("These should all return 0 (vector_get()): ");
+    printf("%s", "These should all return 0 (vector_get()): ");
     printf("%d ", vector_get(v, 0));
     printf("%d ", vector_get(v, 1));
     printf("%d\n", vector_get(v, 2));
 
-    printf("Doing a bunch of vector_set()s\n");
+    printf("%s\n", "Doing a bunch of vector_set()s");
     vector_set(v, 0, 98);
     vector_set(v, 11, 15);
     vector_set(v, 15, -23);
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     vector_set(v, 15, 21);
     vector_set(v, 25, 43);
 
-    printf("These should be equal:\n");
+    printf("%s\n", "These should be equal:");
     printf("98 = %d\n", vector_get(v, 0));
     printf("15 = %d\n", vector_get(v, 11));
     printf("65 = %d\n", vector_get(v, 24));
@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     vector_delete(v);
 
-    printf("Test complete.\n");
+    printf("%s\n", "Test complete.");
 
     return 0;
 }
