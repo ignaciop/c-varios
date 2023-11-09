@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     FILE *fp = NULL;
     int nfiles = --argc; /*ignore the name of the program itself*/
     int argidx = 1;      /*ignore the name of the program itself*/
