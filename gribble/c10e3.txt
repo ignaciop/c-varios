@@ -1,0 +1,4 @@
+Reversed and Uppercase Strings:
+1. ALOH
+2. OMOC
+3. AV
