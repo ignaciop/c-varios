@@ -2,16 +2,16 @@
 #define __ADDRESS_BOOK_H__
 
 struct Person {
-    char *name;
-    char *age;
-    char *phone;
+    char name[80];
+    char age[4];
+    char phone[80];
 };
 
 typedef struct Person Person;
 
 struct Address_book {
     Person *persons;
-    size_t elems;
+    size_t entries;
 };
 
 typedef struct Address_book Address_book; 
