@@ -1,0 +1,12 @@
+gnuplot> plot (1/sqrt(2*pi))*exp(-0.5*x**2)
+gnuplot> set xlabel "x"
+gnuplot> set ylabel "P"
+gnuplot> set xrange [-5:5]
+gnuplot> set yrange [0:0.5]
+gnuplot> set xtics -5,1,5
+gnuplot> set ytics 0,0.1,0.5
+gnuplot> set label "95%" right at -1.96
+gnuplot> set label "95%" right at 1.96
+gnuplot> set title "Gaussian distribution (<x> = 0, var = 1)"
+gnuplot> set samples 1000
+gnuplot> replot
