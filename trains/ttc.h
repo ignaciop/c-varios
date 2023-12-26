@@ -11,7 +11,7 @@ struct passenger {
 	struct passenger *next;	
 };
 
-struct passenger* make_passenger();
+struct passenger* make_passenger(void);
 void insert_passenger_after(struct passenger *node, struct passenger *new_node);
 int num_passengers(struct passenger *first);
 void print_passenger(struct passenger *node);
@@ -61,7 +61,7 @@ void print_stations(struct station *first); // given to students
 int passengers_at_station(struct station *curr); // given to students
 
 void insert_station_after(struct station *node, struct station *new_node); 
-struct station* read_stations();
+struct station* read_stations(void);
 void add_passenger(struct station *curr_station);
 void add_n_passengers(struct station *curr_station, int n);
 int total_passengers(struct station *first);

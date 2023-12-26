@@ -2,10 +2,8 @@
 // Elizabeth Patitsas; January 22, 2013
 // Uncomment/comment lines as appropriate to test your code :)
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<assert.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "ttc.h"
 
 int main(void) {

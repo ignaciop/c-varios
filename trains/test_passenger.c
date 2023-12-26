@@ -2,10 +2,8 @@
 // Elizabeth Patitsas; January 22, 2013
 // Uncomment/comment lines as appropriate to test your code :)
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<assert.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "ttc.h"
 
 int main(void) {
@@ -22,7 +20,7 @@ int main(void) {
 	struct passenger *second = make_passenger();
 	insert_passenger_after(first, second);
 	print_passenger(first->next); // should print 0
-	insert_passenger_after(second, make_passenger() );
+	insert_passenger_after(second, make_passenger());
 	print_passenger(first->next->next); // should print 0
 	print_passenger(second->next); // should print 0
 
