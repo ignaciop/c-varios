@@ -1,31 +1,9 @@
-// ttc.c - simulates the Bloor-Danforth line of the TTC
-// Elizabeth Patitsas + YOURNAMESHERE, DATE
+/* ttc.c - simulates the Bloor-Danforth line of the TTC */
+/* Elizabeth Patitsas + Ignacio Poggi, 2023 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "ttc.h"
-
-#define SPADINA 36
-#define YONGE 42
-
-#define MAX_POS 82
-
-#define MAX_LOAD 500
-#define TRAIN_GAP 5
-
-// these control the behaviour of the program and are for
-// students to play with
-#define DEBUGGING 0
-#define SIM_TIME 60*10
-
-void advance_time(struct station *kipling, struct train **first);
-void passengers_wait(struct station *kipling); // STUDENT TODO
-void add_trains(struct train **first);
-int num_arriving_passengers(struct station *curr);
-void enter_passengers(struct station *kipling); // STUDENT TODO
-void load_trains(struct station *kipling, struct train **first); 
-void advance_trains(struct station *kipling, struct train **first);
-void print_track(struct station *first_station, struct train **first_train, int time, int print_track);
-
 
 void advance_time(struct station *kipling, struct train **first) {
 	// Simulates one minute of the Bloor-Danforth line
