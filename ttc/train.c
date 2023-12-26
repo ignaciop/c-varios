@@ -181,7 +181,7 @@ double avg_train_dist(struct train *first) {
 
 void remove_train_after(struct train *node) {
 	if (node == NULL) {
-		fprintf(stderr, "Node is null.\n");
+		fprintf(stderr, "Train is null.\n");
 		
 		exit(EXIT_FAILURE);
 	}

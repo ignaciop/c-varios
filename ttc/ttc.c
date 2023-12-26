@@ -11,7 +11,7 @@ void advance_time(struct station *kipling, struct train **first) {
 	/* POST: the stations and trains will be altered: trains will advance, stations' passengers will increase/decrease */
 
 	if (kipling == NULL && first == NULL && *first == NULL && (*first)->next == NULL) {
-		fprintf(stderr, "Preconditions on stations are null.\n");
+		fprintf(stderr, "There is more than one train on the track.\n");
 		
 		exit(EXIT_FAILURE);
 	}
