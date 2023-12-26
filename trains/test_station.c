@@ -80,9 +80,9 @@ int main(void) {
 	print_passenger_list(spadina->passengers);
 	print_passenger_list(spadina->next->passengers);
 	print_passenger_list(spadina->next->next->passengers);
-	//printf("%lf\n", average_wait_time(spadina)); // should be 0.500000
+	printf("%lf\n", average_wait_time(spadina)); // should be 0.500000
 	//printf("%lf\n", average_wait_time(kipling)); // should be -nan
-	//printf("%lf\n", average_wait_time(NULL)); // should be -nan
+	printf("%lf\n", average_wait_time(NULL)); // should be -nan
 
 	// Test 7. Station at position
 	//print_station(get_station_at_pos(42, kipling)); // should be Yonge

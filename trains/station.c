@@ -180,7 +180,32 @@ int total_passengers(struct station *first) {
 }
 
 double average_wait_time(struct station *first) {
-	return 0.0;
+	double avg = 0.0;
+	
+	int total_wait = 0;
+	
+	struct station *curr_station = first;
+	int total_pax = total_passengers(curr_station);
+	
+	while (curr_station != NULL) {
+		int wait_per_pax = 0;
+		
+		struct passenger *curr_pax = curr_station->passengers;
+		
+		while (curr_pax != NULL) {
+			wait_per_pax += curr_pax->waiting;
+			
+			curr_pax = curr_pax->next;
+		}
+		
+		total_wait += wait_per_pax;
+		
+		curr_station = curr_station->next;
+	}
+	
+	avg = (double)total_wait / total_pax;
+	
+	return avg;
 }
 
 struct station* get_station_at_pos(int position, struct station *first) {
