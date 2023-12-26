@@ -1,3 +1,6 @@
+/* train.h -- header file of train.c */
+/* Ignacio Poggi, 2023 */
+
 #ifndef TRAIN_H
 #define TRAIN_H
 

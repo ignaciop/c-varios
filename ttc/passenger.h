@@ -1,3 +1,6 @@
+/* passenger.h -- header file of passenger.c */
+/* Ignacio Poggi, 2023 */
+
 #ifndef PASSENGER_H
 #define PASSENGER_H
 

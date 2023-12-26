@@ -44,12 +44,14 @@ int passengers_at_station(struct station *curr_station) {
 	/* Number of passengers waiting at a given station, curr_station. If station == NULL, returns 0. */
 	/* PRE: none */
 	/* POST: none */
+	
+	int total_pax = 0;
 
 	if (curr_station != NULL && curr_station->passengers != NULL) {
-		return num_passengers(curr_station->passengers);
+		total_pax = num_passengers(curr_station->passengers);
 	}
 
-	return 0;
+	return total_pax;
 }
 
 void print_station(struct station *current) {
@@ -107,7 +109,7 @@ struct station* read_stations() {
 	FILE *station_file = fopen("bloor_line.txt", "r");
 	
 	if (station_file == NULL) {
-		fprintf(stderr, "Cannot read input file.\n");
+		fprintf(stderr, "Cannot read stations input file.\n");
 		
 		exit(EXIT_FAILURE);
 	}

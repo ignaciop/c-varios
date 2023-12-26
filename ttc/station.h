@@ -1,3 +1,4 @@
+/* station.h -- header file of station.c */
 /* Elizabeth Patitsas; January 22, 2013 */
 
 #ifndef STATION_H

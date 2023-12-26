@@ -1,3 +1,6 @@
+/* passenger.c -- simulates a linked list of passengers */
+/* Ignacio Poggi, 2023 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "passenger.h"
@@ -109,6 +112,7 @@ double average_passenger_list(struct passenger *first) {
 
 int num_passengers(struct passenger *first) {
 	int num = 0;
+	
 	struct passenger *curr_pax = first;
 	
 	while (curr_pax != NULL) {

@@ -50,7 +50,9 @@ int train_at_position(struct train *first, int pos) {
 	
 	while (curr_tn != NULL) {
 		if(curr_tn->pos == pos) {
-			return 1;
+			contains_pos = 1;
+			
+			break;
 		}
 		
 		curr_tn = curr_tn->next;

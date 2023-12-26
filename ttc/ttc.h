@@ -1,3 +1,4 @@
+/* ttc.h -- header file of ttc.c */
 /* Elizabeth Patitsas + Ignacio Poggi, 2023 */
 
 #ifndef TTC_H
