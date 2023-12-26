@@ -16,7 +16,7 @@ int main(void) {
 	FILE *sim_file = fopen("data.csv","w+");
 	
 	if (sim_file == NULL) {
-		fprintf(stderr, "Cannot read sim input file.\n");
+		fprintf(stderr, "Cannot read sim output file.\n");
 		
 		exit(EXIT_FAILURE);
 	}
