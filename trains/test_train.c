@@ -51,7 +51,7 @@ int main(void) {
 	printf("%d\n", can_advance(first->next, 0)); // should be 1
 	printf("%d\n", can_advance(first->next, 3)); // should be 0
 	// check asserts -- comment/uncomment these one by one
-//	printf("%d\n", can_advance(first, -1) ); // should abort
+	printf("%d\n", can_advance(first, -1) ); // should abort
 //	printf("%d\n", can_advance(NULL, 0) ); // should abort
 
 	// Test 6: advance train
