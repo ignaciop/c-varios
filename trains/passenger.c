@@ -24,6 +24,7 @@ void insert_passenger_after(struct passenger *node, struct passenger *new_node) 
 		exit(EXIT_FAILURE);
 	}
 	
+	new_node->next = node->next;
 	node->next = new_node;
 }
 

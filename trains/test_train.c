@@ -51,8 +51,8 @@ int main(void) {
 	printf("%d\n", can_advance(first->next, 0)); // should be 1
 	printf("%d\n", can_advance(first->next, 3)); // should be 0
 	// check asserts -- comment/uncomment these one by one
-	printf("%d\n", can_advance(first, -1) ); // should abort
-//	printf("%d\n", can_advance(NULL, 0) ); // should abort
+	//printf("%d\n", can_advance(first, -1) ); // should abort
+	//printf("%d\n", can_advance(NULL, 0) ); // should abort
 
 	// Test 6: advance train
 	advance_train(first, 10); // shouldn't advance
@@ -75,7 +75,7 @@ int main(void) {
 	printf("%d\n", num_trains(first)); // should be 7
 	printf("%d\n", num_trains(NULL)); // should be 0
 
-	// Test 8: avg distance betwen trains
+	// Test 8: avg distance between trains
 	printf("%lf\n", avg_train_dist(first)); // should be 1.333333
 	printf("%lf\n", avg_train_dist(NULL)); // should be 0.0000
 

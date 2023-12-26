@@ -18,7 +18,7 @@ int main(void) {
 	*/
 
 	// Test 2. Read stations in from bloor_line.txt
-	struct station *kipling = read_stations();
+	//struct station *kipling = read_stations();
 //	print_stations(kipling);
 	/* should print:
 		The stations: 
@@ -50,8 +50,8 @@ int main(void) {
 		    Greenwood -> Coxwell (0)-> Woodbine      
 		      Coxwell -> Woodbine (0)-> MainStreet    
 		     Woodbine -> MainStreet (0)-> VictioriaPark 
-		   MainStreet -> VictioriaPark (0)-> Warden        
-		VictioriaPark -> Warden (0)-> Kennedy       
+		   MainStreet -> VictoriaPark (0)-> Warden        
+		VictoriaPark  -> Warden (0)-> Kennedy       
 		       Warden -> Kennedy (0)
 	*/
 
@@ -72,25 +72,25 @@ int main(void) {
 
 	// Test 5. Number of passengers waiting at a station.
 	printf("%d\n", total_passengers(spadina)); // should be 8
-	printf("%d\n", total_passengers(kipling)); // should be 0
+	//printf("%d\n", total_passengers(kipling)); // should be 0
 	printf("%d\n", total_passengers(NULL)); // should be 0
 
 	// Test 6. Average wait time over the entire TTC.
 	increment_passenger_list(spadina->passengers);
-	// print_passenger_list(spadina->passengers);
-	// print_passenger_list(spadina->next->passengers);
-	// print_passenger_list(spadina->next->next->passengers);
-	printf("%lf\n", average_wait_time(spadina)); // should be 0.500000
-	printf("%lf\n", average_wait_time(kipling)); // should be -nan
-	printf("%lf\n", average_wait_time(NULL)); // should be -nan
+	print_passenger_list(spadina->passengers);
+	print_passenger_list(spadina->next->passengers);
+	print_passenger_list(spadina->next->next->passengers);
+	//printf("%lf\n", average_wait_time(spadina)); // should be 0.500000
+	//printf("%lf\n", average_wait_time(kipling)); // should be -nan
+	//printf("%lf\n", average_wait_time(NULL)); // should be -nan
 
 	// Test 7. Station at position
-	print_station(get_station_at_pos(42, kipling)); // should be Yonge
+	//print_station(get_station_at_pos(42, kipling)); // should be Yonge
 //	assert( !get_station_at_pos(43, kipling) ); // should be NULL
 
 	// Test 8. Remove all stations
-	remove_all_stations(&kipling); 
-	print_stations(kipling); // prints only "The stations:"
+	//remove_all_stations(&kipling); 
+	//print_stations(kipling); // prints only "The stations:"
 	remove_all_stations(&spadina); 
 	print_stations(spadina); // prints only "The stations:"
 

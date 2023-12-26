@@ -116,6 +116,12 @@ void print_trains(struct train *first) {
 int can_advance(struct train *current, int passengers_on_platform) {
 	int advance = 0;
 	
+	if (current == NULL || passengers_on_platform < 0 ) {
+		fprintf(stderr, "Train is null or there are 0 passengers on platform.\n");
+		
+		exit(EXIT_FAILURE);
+	}
+	
 	struct train *next_tn = current->next;
 	
 	if ((next_tn->pos > current->pos + 1) && (passengers_on_platform == 0)) {
