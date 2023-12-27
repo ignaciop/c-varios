@@ -96,9 +96,9 @@ void print_stations(struct station *first) {
 
 void insert_station_after(struct station *node, struct station *new_node) {
 	new_node->prev = node;
-	new_node->next = node->next;
-	
+
 	if (node->next != NULL) {
+		new_node->next = node->next;
         node->next->prev = new_node;
     }
     
@@ -117,21 +117,21 @@ struct station* read_stations() {
 	char tmp_st_name[MAX_NAME_BUFFER] = {'0'};
 	int tmp_st_pos = 0;
 	
-	fscanf(station_file, "%s %d", tmp_st_name, &tmp_st_pos);
-	
-	/* Make head station */
-	struct station *first_station = make_station(tmp_st_name, tmp_st_pos);
-	struct station *prev_station = first_station;
+	/* Make head and temp stations */
+	struct station *new_station = NULL;
+	struct station *first_station = NULL;
+	struct station *prev_station = NULL;
 
-	while (!feof(station_file)) {
-		fscanf(station_file, "%s %d", tmp_st_name, &tmp_st_pos);
+	while (fscanf(station_file, "%s %d", tmp_st_name, &tmp_st_pos) != EOF) {
+		new_station = make_station(tmp_st_name, tmp_st_pos);
 		
-		/* Make new station while reading file */
-		struct station *nx_station = make_station(tmp_st_name, tmp_st_pos);
+		if (prev_station != NULL) {
+			insert_station_after(prev_station, new_station);
+		} else {
+			first_station = new_station;
+		}
 		
-		insert_station_after(prev_station, nx_station);
-		
-		prev_station = nx_station;
+		prev_station = new_station;
 	}
 	
 	fclose(station_file);
@@ -185,17 +185,17 @@ double average_wait_time(struct station *first) {
 	int total_pax = total_passengers(curr_station);
 	
 	while (curr_station != NULL) {
-		int wait_per_pax = 0;
+		int acc_wait = 0;
 		
 		struct passenger *curr_pax = curr_station->passengers;
 		
 		while (curr_pax != NULL) {
-			wait_per_pax += curr_pax->waiting;
+			acc_wait += curr_pax->waiting;
 			
 			curr_pax = curr_pax->next;
 		}
 		
-		total_wait += wait_per_pax;
+		total_wait += acc_wait;
 		
 		curr_station = curr_station->next;
 	}

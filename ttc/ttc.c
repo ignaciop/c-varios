@@ -33,11 +33,19 @@ void advance_time(struct station *kipling, struct train **first) {
 }
 
 void passengers_wait(struct station *kipling) {
-
+	struct station *curr_station = kipling;
+	
+	while (curr_station != NULL) {
+		if (curr_station->passengers != NULL) {
+			increment_passenger_list(curr_station->passengers);
+		}
+		
+		curr_station = curr_station->next;
+	}
 }
 
 void add_trains(struct train **first) {
-	/* adds trains to the track every time the westmost train */ /* gets to position = TRAIN_GAP */
+	/* adds trains to the track every time the westmost train gets to position = TRAIN_GAP */
 	/* PRE: *first != NULL */
 	/* POST: first will be altered if a new train is added */
 	
@@ -79,7 +87,15 @@ int num_arriving_passengers(struct station *curr_station) {
 }
 
 void enter_passengers(struct station *kipling) {
-
+	struct station *curr_station = kipling;
+	
+	while (curr_station != NULL) {
+		int pax_to_add = num_arriving_passengers(curr_station);
+		
+		add_n_passengers(curr_station, pax_to_add);
+		
+		curr_station = curr_station->next;
+	}
 }
 
 void load_trains(struct station *kipling, struct train **first) {
@@ -93,15 +109,15 @@ void load_trains(struct station *kipling, struct train **first) {
 		/* is there a station at this train's position? */
 		struct station *curr_station = get_station_at_pos(curr_train->pos, kipling);	
 
-		if (curr_station) {
+		if (curr_station != NULL) {
 			/* then we need to load our train */
 			struct passenger **passgrs = &(curr_station->passengers);
 			
 			int num_passeng = num_passengers(*passgrs);
 
-			if (*passgrs && num_passeng <= MAX_LOAD) {
+			if (*passgrs != NULL && num_passeng <= MAX_LOAD) {
 				clear_passenger_list(passgrs);
-			} else if (*passgrs) {
+			} else if (*passgrs != NULL) {
 				/* remove MAX_LOAD many passengers */
 				for(int i = 0; i < MAX_LOAD; i++) {
 					remove_first_passenger(passgrs);
@@ -127,7 +143,7 @@ void advance_trains(struct station *kipling, struct train **first) {
 	struct train *curr_train = *first;
 	struct train *prev_train = NULL;
 	
-	while (curr_train) {
+	while (curr_train != NULL) {
 		if (curr_train->pos >= MAX_POS + 1) {
 			/* delete the train when it gets to position 83 */
 			prev_train->next = NULL;
@@ -141,7 +157,7 @@ void advance_trains(struct station *kipling, struct train **first) {
 			
 			struct station *curr_station = get_station_at_pos(curr_train->pos, kipling);	
 			
-			if (curr_station) {
+			if (curr_station != NULL) {
 				num_pass = num_passengers(curr_station->passengers);
 			}
 

@@ -33,7 +33,7 @@ void insert_passenger_after(struct passenger *node, struct passenger *new_node) 
 
 void print_passenger(struct passenger *node) {
 	if (node != NULL) {
-		printf("%s %d\n", "Waiting time:", node->waiting);
+		printf("%d\n", node->waiting);
 	} else {
 		printf("%s\n", "NULL");
 	}

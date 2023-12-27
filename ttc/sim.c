@@ -16,11 +16,28 @@ int main(void) {
 	FILE *sim_file = fopen("data.csv","w+");
 	
 	if (sim_file == NULL) {
-		fprintf(stderr, "Cannot read sim output file.\n");
+		fprintf(stderr, "Cannot write sim output file.\n");
 		
 		exit(EXIT_FAILURE);
 	}
-
+	
+	int sim_time = 0;
+	int debugging = 0;
+	
+	do {
+		printf("%s ", "Run simulation in debug mode? (1 for yes, 0 for no):");
+		
+		scanf("%d", &debugging);
+	} while (debugging != 0 && debugging != 1);
+	
+	if (debugging == 0) {
+		do {
+			printf("\n%s ", "Enter a simulation time (in minutes):");
+			
+			scanf("%d", &sim_time);
+		} while (sim_time < 0);
+	}
+	
 	/* set up our first station and first two trains */
 	struct station *kipling = read_stations();
 	struct train *first = make_train(5, 0);
@@ -28,22 +45,26 @@ int main(void) {
 	
 	first->next = second;
 
-	if (DEBUGGING == 1) {
+	if (debugging == 1) {
 		test_cases_for_students(kipling, first);
 	} else {
 		/* if we're not debugging, then simulate! */
 		fprintf(sim_file, "time, avg_wait, num_trains, avg_dist\n");
-
-		for (int i = 0; i < SIM_TIME; i++) {
+		
+		for (int i = 0; i < sim_time; i++) {
 			advance_time(kipling, &first);
 			
 			/* print data every half hour */
-			if(i % 30 == 0) {
+			if (i % 30 == 0) {
 				fprintf(sim_file, "%d, %lf, %d, %lf\n", i, average_wait_time(kipling), num_trains(first), avg_train_dist(first));
 			}
+			
+			printf("\rProgress: %d/%d (%d%%)", i, sim_time, ((i * 100) / sim_time));
 		}
-
-		print_track(kipling, &first, i, 1);
+		
+		printf("%s", "\n\n");
+		
+		print_track(kipling, &first, sim_time, 1);
 	}
 
 	/* cleanup */

@@ -15,10 +15,6 @@
 #define MAX_LOAD 500
 #define TRAIN_GAP 5
 
-/* these control the behaviour of the program and are for students to play with */
-#define DEBUGGING 0
-#define SIM_TIME 60*10
-
 void advance_time(struct station *kipling, struct train **first);
 void passengers_wait(struct station *kipling);
 void add_trains(struct train **first);

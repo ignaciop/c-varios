@@ -30,7 +30,7 @@ int contains_train_id(struct train *first, int value) {
 		if (curr_tn->id == value) {
 			contain_id = 1;
 			
-			break;
+			//break;
 		}
 		
 		curr_tn = curr_tn->next;
@@ -72,7 +72,7 @@ void prepend_train(struct train **first, struct train *new_node) {
 	
 	int can_prepend = 1;
 	
-	while (curr_tn != NULL) {
+	while (curr_tn != NULL && curr_tn->next != NULL) {
 		if ((new_node->pos < curr_tn->pos) && (contains_train_id(curr_tn, new_node->id) == 0)) {
 			curr_tn = curr_tn->next;
 		} else {
@@ -131,7 +131,7 @@ int can_advance(struct train *current, int passengers_on_platform) {
 	
 	struct train *next_tn = current->next;
 	
-	if ((next_tn->pos > current->pos + 1) && (passengers_on_platform == 0)) {
+	if (next_tn == NULL || ((next_tn->pos > current->pos + 1) && (passengers_on_platform == 0))) {
 		advance = 1;
 	}
 	
@@ -139,7 +139,7 @@ int can_advance(struct train *current, int passengers_on_platform) {
 }
 
 void advance_train(struct train *current, int passengers_on_platform) {
-	if (can_advance(current, passengers_on_platform) == 1) {
+	if (current != NULL && (can_advance(current, passengers_on_platform) == 1)) {
 		current->pos += 1;
 	}
 }
@@ -168,8 +168,8 @@ double avg_train_dist(struct train *first) {
 	int total_distance = 0;
 	int total_trains = num_trains(curr_tn);
 	
-	while (curr_tn->next != NULL) {
-		total_distance += curr_tn->next->pos - curr_tn->pos - 1;
+	while (curr_tn != NULL && curr_tn->next != NULL) {
+		total_distance += (curr_tn->next->pos - curr_tn->pos - 1);
 		
 		curr_tn = curr_tn->next;
 	}
