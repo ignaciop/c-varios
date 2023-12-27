@@ -22,7 +22,7 @@ struct passenger* make_passenger() {
 
 void insert_passenger_after(struct passenger *node, struct passenger *new_node) {
 	if (node == NULL || new_node == NULL) {
-		fprintf(stderr, "Both passengers are null.\n");
+		fprintf(stderr, "One or both passengers are null.\n");
 		
 		exit(EXIT_FAILURE);
 	}
