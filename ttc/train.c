@@ -62,7 +62,7 @@ int train_at_position(struct train *first, int pos) {
 }
 
 void prepend_train(struct train **first, struct train *new_node) {
-	if (*first == NULL && new_node == NULL) {
+	if (*first == NULL || new_node == NULL) {
 		fprintf(stderr, "Both trains are null.\n");
 		
 		exit(EXIT_FAILURE);
