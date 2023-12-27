@@ -30,14 +30,6 @@ int main(void) {
 		scanf("%d", &debugging);
 	} while (debugging != 0 && debugging != 1);
 	
-	if (debugging == 0) {
-		do {
-			printf("\n%s ", "Enter a simulation time (in minutes):");
-			
-			scanf("%d", &sim_time);
-		} while (sim_time < 0);
-	}
-	
 	/* set up our first station and first two trains */
 	struct station *kipling = read_stations();
 	struct train *first = make_train(5, 0);
@@ -48,6 +40,12 @@ int main(void) {
 	if (debugging == 1) {
 		test_cases_for_students(kipling, first);
 	} else {
+		do {
+			printf("\n%s ", "Enter a simulation time (in minutes):");
+			
+			scanf("%d", &sim_time);
+		} while (sim_time < 0);
+		
 		/* if we're not debugging, then simulate! */
 		fprintf(sim_file, "time, avg_wait, num_trains, avg_dist\n");
 		
