@@ -23,10 +23,12 @@ int main(void) {
 	}
 	
 	int sim_time = 0;
-	int debugging = 0;
+	char debugging = '0';
 	
-	printf("%s ", "Run simulation in debug mode? (1 for yes, any other character for no):");
-	scanf("%d", &debugging);
+	do {
+		printf("%s ", "Run simulation in debug mode? (1 for yes, any other digit for no):");
+		scanf(" %c", &debugging);
+	} while (!isdigit(debugging));
 	
 	/* set up our first station and first two trains */
 	struct station *kipling = read_stations();
@@ -35,11 +37,13 @@ int main(void) {
 	
 	first->next = second;
 
-	if (debugging == 1) { 
+	if (debugging == '1') {
+		printf("%s\n", "Tests for debugging purposes");
+		
 		test_cases_for_students(kipling, first);
 	} else {
 		do {
-			printf("\n%s ", "Enter a simulation time (in minutes):");
+			printf("\n%s\n", "Enter a simulation time (in minutes):");
 		
 			scanf("%d", &sim_time);
 		} while (sim_time < 0);

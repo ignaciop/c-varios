@@ -211,5 +211,5 @@ void print_track(struct station *first_station, struct train **first_train, int 
 	printf("Total number of passengers: %d \n", total_passengers(first_station));
 	printf("Average wait time of passengers (in min): %lf \n", average_wait_time(first_station));
 	printf("Total number of trains: %d \n", num_trains(*first_train));
-	printf("Average distance between trains (in km): %lf \n", avg_train_dist(*first_train));
+	printf("Average distance between trains (in km): %lf \n\n", avg_train_dist(*first_train));
 }
