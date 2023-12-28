@@ -23,13 +23,10 @@ int main(void) {
 	}
 	
 	int sim_time = 0;
-	char debug = '0';
+	int debugging = 0;
 	
-	debug_op:
-	do {
-		printf("%s ", "Run simulation in debug mode? (1 for yes, 0 for no):");
-		scanf(" %c", &debug);
-	} while (!isdigit(debug) && (debug != '0' || debug != '1'));
+	printf("%s ", "Run simulation in debug mode? (1 for yes, any other character for no):");
+	scanf("%d", &debugging);
 	
 	/* set up our first station and first two trains */
 	struct station *kipling = read_stations();
@@ -38,39 +35,32 @@ int main(void) {
 	
 	first->next = second;
 
-	switch (debug) {
-		case '1':
-			test_cases_for_students(kipling, first);
-			
-			break;
-		case '0':
-			do {
-				printf("\n%s ", "Enter a simulation time (in minutes):");
-			
-				scanf("%d", &sim_time);
-			} while (sim_time < 0);
+	if (debugging == 1) { 
+		test_cases_for_students(kipling, first);
+	} else {
+		do {
+			printf("\n%s ", "Enter a simulation time (in minutes):");
 		
-			/* if we're not debugging, then simulate! */
-			fprintf(sim_file, "time, avg_wait, num_trains, avg_dist\n");
+			scanf("%d", &sim_time);
+		} while (sim_time < 0);
+	
+		/* if we're not debugging, then simulate! */
+		fprintf(sim_file, "time, avg_wait, num_trains, avg_dist\n");
+		
+		for (int i = 0; i < sim_time; i++) {
+			advance_time(kipling, &first);
 			
-			for (int i = 0; i < sim_time; i++) {
-				advance_time(kipling, &first);
-				
-				/* print data every half hour */
-				if (i % 30 == 0) {
-					fprintf(sim_file, "%d, %lf, %d, %lf\n", i, average_wait_time(kipling), num_trains(first), avg_train_dist(first));
-				}
-				
-				printf("\rProgress: %d/%d (%d%%)", i, sim_time, ((i * 100) / sim_time));
+			/* print data every half hour */
+			if (i % 30 == 0) {
+				fprintf(sim_file, "%d, %lf, %d, %lf\n", i, average_wait_time(kipling), num_trains(first), avg_train_dist(first));
 			}
 			
-			printf("%s", "\n\n");
-			
-			print_track(kipling, &first, sim_time, 1);
-			
-			break;
-		default:
-			goto debug_op;
+			printf("\rProgress: %d/%d (%d%%)", i, sim_time, ((i * 100) / sim_time));
+		}
+		
+		printf("%s", "\n\n");
+		
+		print_track(kipling, &first, sim_time, 1);
 	}
 
 	/* cleanup */
