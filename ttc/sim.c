@@ -13,15 +13,6 @@ int main(void) {
 	/* To keep things consitent, we'll use a predefined seed of 1 */
 	srand(1);
 
-	/* we'll be outputting data to a file called data.csv */
-	FILE *sim_file = fopen("data.csv","w+");
-	
-	if (sim_file == NULL) {
-		fprintf(stderr, "Cannot write sim output file.\n");
-		
-		exit(EXIT_FAILURE);
-	}
-	
 	int sim_time = 0;
 	char debugging = '0';
 	
@@ -38,15 +29,24 @@ int main(void) {
 	first->next = second;
 
 	if (debugging == '1') {
-		printf("%s\n", "Tests for debugging purposes");
+		printf("\n%s\n\n", "Tests for debugging purposes");
 		
 		test_cases_for_students(kipling, first);
 	} else {
 		do {
-			printf("\n%s\n", "Enter a simulation time (in minutes):");
+			printf("\n%s ", "Enter a simulation time (in minutes):");
 		
 			scanf("%d", &sim_time);
 		} while (sim_time < 0);
+		
+		/* we'll be outputting data to a file called data.csv */
+		FILE *sim_file = fopen("data.csv","w+");
+		
+		if (sim_file == NULL) {
+			fprintf(stderr, "Cannot write sim output file.\n");
+			
+			exit(EXIT_FAILURE);
+		}
 	
 		/* if we're not debugging, then simulate! */
 		fprintf(sim_file, "time, avg_wait, num_trains, avg_dist\n");
@@ -59,20 +59,20 @@ int main(void) {
 				fprintf(sim_file, "%d, %lf, %d, %lf\n", i, average_wait_time(kipling), num_trains(first), avg_train_dist(first));
 			}
 			
-			printf("\rProgress: %d/%d (%d%%)", i, sim_time, ((i * 100) / sim_time));
+			printf("\rProgress: %d of %d min (%d%%)", i + 1, sim_time, ((i + 1) * 100) / sim_time);
 		}
 		
 		printf("%s", "\n\n");
 		
 		print_track(kipling, &first, sim_time, 1);
+		
+		fclose(sim_file);
 	}
 
 	/* cleanup */
 	clear_all_trains(&first);
 	
 	remove_all_stations(&kipling);
-	
-	fclose(sim_file);
 	
 	return EXIT_SUCCESS;
 }
