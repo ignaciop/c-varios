@@ -8,8 +8,8 @@ all: train reaction
 train: train-runner.c train.c train.h
 	$(CC) $(CFLAGS) -o train train-runner.c train.c -lpthread 
 
-reaction: reaction-runner.c reaction.c
-	$(CC) $(CFLAGS) -o reaction reaction-runner.c -lpthread 
+reaction: reaction-runner.c reaction.c reaction.h
+	$(CC) $(CFLAGS) -o reaction reaction-runner.c reaction.c -lpthread 
 
 run_train: train
 	./train
