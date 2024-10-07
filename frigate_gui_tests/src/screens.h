@@ -37,6 +37,7 @@ typedef enum GameScreen { UNKNOWN = -1, MENU, OPTIONS, GAMEPLAY, ENDING } GameSc
 extern GameScreen currentScreen;
 extern Image bg;
 extern Font font;
+extern Font font2;
 extern Music music;
 extern Sound fxCoin;
 extern const int ROWS;

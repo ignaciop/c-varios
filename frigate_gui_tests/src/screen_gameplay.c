@@ -65,15 +65,17 @@ void DrawGameplayScreen(void)
     // TODO: Draw GAMEPLAY screen here!
     ClearBackground(BLACK);
      
-    int offsetx = GetScreenWidth() / 12;
+    int offsetx = GetScreenWidth() / 10;
     int offsety = GetScreenHeight() / 16;
+    
+    Vector2 pos2d = (Vector2){0, 0};
      
     for (int i = 0; i < COLS; i++) {
-        Vector2 pos2d = (Vector2){offsetx - cellWidth, offsety + i * cellHeight};
+        pos2d = (Vector2){offsetx - 40, offsety + i * cellHeight};
         sprintf(buffer, "%2i", i + 1);
         DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
         
-        pos2d = (Vector2){offsetx + i * cellWidth, offsety - cellHeight};
+        pos2d = (Vector2){offsetx + i * cellWidth, offsety - 40};
             
         sprintf(buffer, "%c", i + 'A');
         DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
@@ -91,13 +93,28 @@ void DrawGameplayScreen(void)
             int indexJ = mPos.y / cellHeight;
             
             sprintf(buffer, "x = %i, y = %i", indexI, indexJ);
-            DrawTextEx(font, buffer, (Vector2){mPos.x + 5, mPos.y + 15}, 20, 0, BLACK);
+            DrawTextEx(font, buffer, (Vector2){mPos.x + 5, mPos.y + 15}, 22, 0, BLACK);
             */
             
             DrawRectangleLines(offsetx+i * cellWidth, offsety+j * cellHeight, cellWidth, cellHeight, DARKBLUE);
         }
     }
     
+    pos2d = (Vector2){offsetx * 12 / 4, offsety * 16 - 80};
+    sprintf(buffer, "%d", 200);
+    DrawTextEx(font2, buffer, pos2d, 48, 0, PURPLE);
+    
+    pos2d = (Vector2){offsetx * 12 / 4, offsety * 16 - 40};
+    sprintf(buffer, "%s", "remaining shots");
+    DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
+    
+    pos2d = (Vector2){offsetx * 12 / 4 + 250, offsety * 16 - 80};
+    sprintf(buffer, "%d/%d", 3, 4);
+    DrawTextEx(font2, buffer, pos2d, 48, 0, GREEN);
+    
+    pos2d = (Vector2){offsetx * 12 / 4 + 250, offsety * 16 - 40};
+    sprintf(buffer, "%s", "sunken ships");
+    DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
     
 }
 

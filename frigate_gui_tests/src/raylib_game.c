@@ -10,6 +10,7 @@
 GameScreen currentScreen = MENU;
 Image bg = {0};
 Font font = {0};
+Font font2 = {0};
 Music music = { 0 };
 Sound fxCoin = { 0 };
 
@@ -56,11 +57,12 @@ int main(void) {
 
     // Load global data (assets that must be available in all screens, i.e. font)
     font = LoadFontEx("resources/Iosevka-ExtendedSemiBold.ttf", 22, NULL, 0);
+    font2 = LoadFontEx("resources/Iosevka-ExtendedSemiBold.ttf", 48, NULL, 0);
     bg = LoadImage("resources/bg4.png");
     music = LoadMusicStream("resources/ambient.ogg");
     fxCoin = LoadSound("resources/coin.wav");
 
-    SetMusicVolume(music, 1.0f);
+    SetMusicVolume(music, 0.1f);
     PlayMusicStream(music);
 
     // Setup and init first screen
@@ -92,6 +94,7 @@ int main(void) {
 
     // Unload global data loaded
     UnloadFont(font);
+    UnloadFont(font2);
     UnloadImage(bg);
     UnloadMusicStream(music);
     UnloadSound(fxCoin);
