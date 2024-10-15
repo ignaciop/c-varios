@@ -8,7 +8,6 @@
 // NOTE: Those variables are shared between modules through screens.h
 //----------------------------------------------------------------------------------
 GameScreen currentScreen = MENU;
-Image bg = {0};
 Font font = {0};
 Font font2 = {0};
 Music music = { 0 };
@@ -58,7 +57,6 @@ int main(void) {
     // Load global data (assets that must be available in all screens, i.e. font)
     font = LoadFontEx("resources/Iosevka-ExtendedSemiBold.ttf", 22, NULL, 0);
     font2 = LoadFontEx("resources/Iosevka-ExtendedSemiBold.ttf", 48, NULL, 0);
-    bg = LoadImage("resources/bg4.png");
     music = LoadMusicStream("resources/ambient.ogg");
     fxCoin = LoadSound("resources/coin.wav");
 
@@ -67,7 +65,7 @@ int main(void) {
 
     // Setup and init first screen
     currentScreen = MENU;
-    InitMenuScreen();
+    InitScreen(currentScreen);
 
     SetTargetFPS(60);       // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -84,24 +82,17 @@ int main(void) {
     // De-Initialization
     //--------------------------------------------------------------------------------------
     // Unload current screen data before closing
-    switch (currentScreen) {
-        case MENU: UnloadMenuScreen(); break;
-        case OPTIONS: UnloadOptionsScreen(); break;
-        case GAMEPLAY: UnloadGameplayScreen(); break;
-        case ENDING: UnloadEndingScreen(); break;
-        default: break;
-    }
+   UnloadScreen(currentScreen); 
 
-    // Unload global data loaded
-    UnloadFont(font);
-    UnloadFont(font2);
-    UnloadImage(bg);
-    UnloadMusicStream(music);
-    UnloadSound(fxCoin);
+   // Unload global data loaded
+   UnloadFont(font);
+   UnloadFont(font2);
+   UnloadMusicStream(music);
+   UnloadSound(fxCoin);
 
-    CloseAudioDevice();     // Close audio context
+   CloseAudioDevice();     // Close audio context
 
-    CloseWindow();          // Close window and OpenGL context
+   CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
     return 0;
@@ -113,24 +104,12 @@ int main(void) {
 // Change to next screen, no transition
 static void ChangeToScreen(GameScreen screen) {
     // Unload current screen
-    switch (currentScreen) {
-        case MENU: UnloadMenuScreen(); break;
-        case OPTIONS: UnloadOptionsScreen(); break;
-        case GAMEPLAY: UnloadGameplayScreen(); break;
-        case ENDING: UnloadEndingScreen(); break;
-        default: break;
-    }
+   UnloadScreen(currentScreen);
 
     // Init next screen
-    switch (screen) {
-        case MENU: InitMenuScreen(); break;
-        case OPTIONS: InitOptionsScreen(); break;
-        case GAMEPLAY: InitGameplayScreen(); break;
-        case ENDING: InitEndingScreen(); break;
-        default: break;
-    }
+   InitScreen(screen);
 
-    currentScreen = screen;
+   currentScreen = screen;
 }
 
 // Request transition to next screen
@@ -153,27 +132,16 @@ static void UpdateTransition(void) {
             transAlpha = 1.0f;
 
             // Unload current screen
-            switch (transFromScreen) {
-                case MENU: UnloadMenuScreen(); break;
-                case OPTIONS: UnloadOptionsScreen(); break;
-                case GAMEPLAY: UnloadGameplayScreen(); break;
-                case ENDING: UnloadEndingScreen(); break;
-                default: break;
-            }
+            UnloadScreen(transFromScreen);
+               
 
             // Load next screen
-            switch (transToScreen) {
-                case MENU: InitMenuScreen(); break;
-                case OPTIONS: InitOptionsScreen(); break;
-                case GAMEPLAY: InitGameplayScreen(); break;
-                case ENDING: InitEndingScreen(); break;
-                default: break;
-            }
+           InitScreen(transToScreen);
 
-            currentScreen = transToScreen;
+           currentScreen = transToScreen;
 
-            // Activate fade out effect to next loaded screen
-            transFadeOut = true;
+           // Activate fade out effect to next loaded screen
+           transFadeOut = true;
         }
     } else {  // Transition fade out logic
         transAlpha -= 0.02f;
@@ -200,34 +168,34 @@ static void UpdateDrawFrame(void) {
     UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
 
     if (!onTransition) {
+        UpdateScreen(currentScreen);
+        
         switch(currentScreen) {
             case MENU:
             {
-                UpdateMenuScreen();
 
-                if (FinishMenuScreen()) TransitionToScreen(GAMEPLAY);
+
+                if (FinishScreen(currentScreen)) TransitionToScreen(GAMEPLAY);
 
             } break;
             case OPTIONS:
             {
-                UpdateOptionsScreen();
 
-                if (FinishOptionsScreen()) TransitionToScreen(MENU);
+
+                if (FinishScreen(currentScreen)) TransitionToScreen(MENU);
 
             } break;
             case GAMEPLAY:
             {
-                UpdateGameplayScreen();
 
-                if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
+                if (FinishScreen(currentScreen) == 1) TransitionToScreen(ENDING);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
             case ENDING:
             {
-                UpdateEndingScreen();
 
-                if (FinishEndingScreen() == 1) TransitionToScreen(MENU);
+                if (FinishScreen(currentScreen) == 1) TransitionToScreen(MENU);
 
             } break;
             default: break;
@@ -242,14 +210,9 @@ static void UpdateDrawFrame(void) {
 
         ClearBackground(RAYWHITE);
 
-        switch(currentScreen) {
 
-            case MENU: DrawMenuScreen(); break;
-            case OPTIONS: DrawOptionsScreen(); break;
-            case GAMEPLAY: DrawGameplayScreen(); break;
-            case ENDING: DrawEndingScreen(); break;
-            default: break;
-        }
+
+        DrawScreen(currentScreen);
 
         // Draw full screen rectangle in front of everything
         if (onTransition) DrawTransition();

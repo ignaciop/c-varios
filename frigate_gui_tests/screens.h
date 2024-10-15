@@ -2,7 +2,7 @@
 *
 *   raylib - Advance Game template
 *
-*   Title Screen Functions Definitions (Init, Update, Draw, Unload)
+*   Screens Functions Declarations (Init, Update, Draw, Unload)
 *
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
@@ -23,59 +23,36 @@
 *
 **********************************************************************************************/
 
-#include "raylib.h"
-#include "screens.h"
+#ifndef SCREENS_H
+#define SCREENS_H
 
 //----------------------------------------------------------------------------------
-// Module Variables Definition (local)
+// Types and Structures Definition
 //----------------------------------------------------------------------------------
-static int framesCounter = 0;
-static int finishScreen = 0;
+typedef enum GameScreen { UNKNOWN = -1, MENU, OPTIONS, GAMEPLAY, ENDING } GameScreen;
 
 //----------------------------------------------------------------------------------
-// Menu Screen Functions Definition
+// Global Variables Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
+extern GameScreen currentScreen;
+extern Font font;
+extern Font font2;
+extern Music music;
+extern Sound fxCoin;
+extern const int ROWS;
+extern const int COLS;
+extern char buffer[10];
+    
+extern const int cellWidth;
+extern const int cellHeight;
 
-// Menu Screen Initialization logic
-void InitMenuScreen(void)
-{
-    // TODO: Initialize MENU screen variables here!
-    framesCounter = 0;
-    finishScreen = 0;
-}
+//----------------------------------------------------------------------------------
+// Screen Functions Declaration
+//----------------------------------------------------------------------------------
+void InitScreen(GameScreen screen);
+void UpdateScreen(GameScreen screen);
+void DrawScreen(GameScreen screen);
+void UnloadScreen(GameScreen screen);
+int FinishScreen(GameScreen screen);
 
-// Menu Screen Update logic
-void UpdateMenuScreen(void)
-{
-    // TODO: Update MENU screen variables here!
-
-    // Press enter or tap to change to GAMEPLAY screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        //finishScreen = 1;   // OPTIONS
-        finishScreen = 2;   // GAMEPLAY
-        PlaySound(fxCoin);
-    }
-}
-
-// Title Screen Draw logic
-void DrawMenuScreen(void)
-{
-    // TODO: Draw Menu screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
-    Vector2 pos = { GetScreenWidth() / 3, GetScreenHeight() / 2};
-    DrawTextEx(font, "Frigate", pos, 72, 4, DARKGREEN);
-    DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
-}
-
-// Menu Screen Unload logic
-void UnloadMenuScreen(void)
-{
-    // TODO: Unload MENU screen variables here!
-}
-
-// Menu Screen should finish?
-int FinishMenuScreen(void)
-{
-    return finishScreen;
-}
+#endif // SCREENS_H
