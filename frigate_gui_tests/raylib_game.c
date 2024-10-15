@@ -20,8 +20,8 @@ char buffer[10];
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
 //----------------------------------------------------------------------------------
-static const int screenWidth = 800;
 static const int screenHeight = 800;
+static const int screenWidth = 800;
 
 const int cellWidth = screenWidth / (ROWS * 1.2);
 const int cellHeight = screenHeight / (COLS * 1.2);
