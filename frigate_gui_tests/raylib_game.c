@@ -10,11 +10,12 @@
 GameScreen currentScreen = MENU;
 Font font = {0};
 Font font2 = {0};
-Music music = { 0 };
-Sound fxCoin = { 0 };
+Music music = {0};
+Sound water = {0};
+Sound bomb = {0};
 
-const int ROWS = 20;
-const int COLS = 20;
+const int ROWS = 15;
+const int COLS = 15;
 char buffer[10];
     
 //----------------------------------------------------------------------------------
@@ -32,6 +33,8 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static GameScreen transToScreen = UNKNOWN;
+
+int shells = 200;
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -57,10 +60,11 @@ int main(void) {
     // Load global data (assets that must be available in all screens, i.e. font)
     font = LoadFontEx("resources/Iosevka-ExtendedSemiBold.ttf", 22, NULL, 0);
     font2 = LoadFontEx("resources/Iosevka-ExtendedSemiBold.ttf", 48, NULL, 0);
-    music = LoadMusicStream("resources/ambient.ogg");
-    fxCoin = LoadSound("resources/coin.wav");
+    music = LoadMusicStream("resources/tribe-drum-loop.mp3");
+    water = LoadSound("resources/water.mp3");
+    bomb = LoadSound("resources/bomb.mp3");
 
-    SetMusicVolume(music, 0.1f);
+    SetMusicVolume(music, 0.5f);
     PlayMusicStream(music);
 
     // Setup and init first screen
@@ -88,7 +92,8 @@ int main(void) {
    UnloadFont(font);
    UnloadFont(font2);
    UnloadMusicStream(music);
-   UnloadSound(fxCoin);
+   UnloadSound(water);
+   UnloadSound(bomb);
 
    CloseAudioDevice();     // Close audio context
 
@@ -168,7 +173,7 @@ static void UpdateDrawFrame(void) {
     UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
 
     if (!onTransition) {
-        UpdateScreen(currentScreen);
+        UpdateScreen(currentScreen, &shells);
         
         switch(currentScreen) {
             case MENU:
@@ -188,7 +193,7 @@ static void UpdateDrawFrame(void) {
             case GAMEPLAY:
             {
 
-                if (FinishScreen(currentScreen) == 1) TransitionToScreen(ENDING);
+                if (FinishScreen(currentScreen) == 2) TransitionToScreen(ENDING);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
@@ -212,7 +217,7 @@ static void UpdateDrawFrame(void) {
 
 
 
-        DrawScreen(currentScreen);
+        DrawScreen(currentScreen, &shells);
 
         // Draw full screen rectangle in front of everything
         if (onTransition) DrawTransition();
