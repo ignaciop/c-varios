@@ -14,6 +14,8 @@ extern Sound bomb;
 extern const int ROWS;
 extern const int COLS;
 extern char buffer[10];
+
+extern char grid[100];
     
 extern const int cellWidth;
 extern const int cellHeight;

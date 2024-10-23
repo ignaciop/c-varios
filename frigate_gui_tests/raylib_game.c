@@ -14,8 +14,10 @@ Music music = {0};
 Sound water = {0};
 Sound bomb = {0};
 
-const int ROWS = 15;
-const int COLS = 15;
+char grid[100] = {0};
+
+const int ROWS = 20;
+const int COLS = 20;
 char buffer[10];
     
 //----------------------------------------------------------------------------------
@@ -74,6 +76,11 @@ int main(void) {
     SetTargetFPS(60);       // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
+    for (int i = 0; i < COLS; i++) {
+        for (int j = 0; j < ROWS; j++) {
+            grid[i + j] = 'm';
+        }
+    }
     // Main game loop
     while (!WindowShouldClose()) {    
         // Detect window close button or ESC key

@@ -10,6 +10,8 @@
 static int framesCounter = 0;
 static int finishScreen = 0;
 
+
+
 //----------------------------------------------------------------------------------
 // Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -104,11 +106,11 @@ void DrawScreen(GameScreen screen, int *shells) {
         Vector2 pos2d = (Vector2){0, 0};
      
         for (int i = 0; i < COLS; i++) {
-            pos2d = (Vector2){offsetx - 40, offsety + i * cellHeight};
+            pos2d = (Vector2){offsetx - 40, offsety + i * cellHeight + cellHeight / 3};
             sprintf(buffer, "%2i", i + 1);
             DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
         
-            pos2d = (Vector2){offsetx + i * cellWidth, offsety - 40};
+            pos2d = (Vector2){offsetx + i * cellWidth + cellWidth / 3, offsety - 40};
             
             sprintf(buffer, "%c", i + 'A');
             DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
@@ -117,7 +119,10 @@ void DrawScreen(GameScreen screen, int *shells) {
               
                 DrawRectangle(offsetx+i * cellWidth, offsety+j * cellHeight, cellWidth, cellHeight, BLUE);
                 //DrawTextEx(font, buffer, pos2d, 20, 0, RAYWHITE);
+                pos2d = (Vector2){offsetx+i * cellWidth + cellWidth / 3, offsety+j * cellHeight + cellHeight / 4};
             
+                sprintf(buffer, "%c", grid[i + j]);
+                DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
         
 
                 /*
@@ -137,11 +142,11 @@ void DrawScreen(GameScreen screen, int *shells) {
         sprintf(buffer, "%d", *shells);
         DrawTextEx(font2, buffer, pos2d, 48, 0, PURPLE);
         
-        pos2d = (Vector2){offsetx *10 / 2, offsety * 16 - 80};
+        pos2d = (Vector2){offsetx *10 / 2 - 15, offsety * 16 - 80};
         sprintf(buffer, "B12");
         DrawTextEx(font2, buffer, pos2d, 48, 0, WHITE);
         
-        pos2d = (Vector2){offsetx *10 / 2 - 14, offsety * 16 - 40};
+        pos2d = (Vector2){offsetx *10 / 2 - 14 - 15, offsety * 16 - 40};
         sprintf(buffer, "is a miss!");
         DrawTextEx(font, buffer, pos2d, 22, 0, GREEN);
     
