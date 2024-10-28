@@ -53,7 +53,6 @@ void UpdateScreen(GameScreen screen, int *shells) {
         if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) {
         //finishScreen = 1;   // OPTIONS
             finishScreen = 2;   // GAMEPLAY
-            PlaySound(bomb);
         }
         
         break;
@@ -62,7 +61,20 @@ void UpdateScreen(GameScreen screen, int *shells) {
     case GAMEPLAY:
         if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP)) {
             finishScreen = 0;
-            PlaySound(water);
+            
+            Vector2 mPos = GetMousePosition();
+            int indexI = mPos.x / cellWidth;
+            int indexJ = mPos.y / cellHeight;
+            
+            if (grid[indexI][indexJ] == 'm' || grid[indexI][indexJ] == ' ') {
+                PlaySound(bomb);
+                grid[indexI][indexJ] = 'h';
+            } else {
+                PlaySound(water);
+                grid[indexI][indexJ] = 'm';
+            }
+            
+            
             (*shells)--;
         }
         
@@ -93,6 +105,9 @@ void DrawScreen(GameScreen screen, int *shells) {
         DrawTextEx(font, "Frigate", pos, 72, 4, DARKGREEN);
         DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
         
+        //DrawTextureEx(water_t, pos, 0, 0.5, WHITE);
+    
+        
         break;
     case OPTIONS:
         break;
@@ -102,7 +117,7 @@ void DrawScreen(GameScreen screen, int *shells) {
      
         int offsetx = GetScreenWidth() / 10;
         int offsety = GetScreenHeight() / 16;
-    
+        
         Vector2 pos2d = (Vector2){0, 0};
      
         for (int i = 0; i < COLS; i++) {
@@ -119,10 +134,18 @@ void DrawScreen(GameScreen screen, int *shells) {
               
                 DrawRectangle(offsetx+i * cellWidth, offsety+j * cellHeight, cellWidth, cellHeight, BLUE);
                 //DrawTextEx(font, buffer, pos2d, 20, 0, RAYWHITE);
-                pos2d = (Vector2){offsetx+i * cellWidth + cellWidth / 3, offsety+j * cellHeight + cellHeight / 4};
+
+                
+                pos2d = (Vector2){i * cellWidth + cellWidth / 1.5, j * cellHeight + cellHeight / 1.5};
             
-                sprintf(buffer, "%c", grid[i + j]);
-                DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
+                if (grid[i][j] == 'm') {
+                    DrawTextureEx(water_t, pos2d, 0, 0.2, WHITE);
+                } else if (grid[i][j] == 'h') {
+                    DrawTextureEx(flame_t, pos2d, 0, 0.2, WHITE);
+                }
+                
+                //sprintf(buffer, "%c", grid[i + j]);
+                //DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
         
 
                 /*
@@ -161,6 +184,7 @@ void DrawScreen(GameScreen screen, int *shells) {
         pos2d = (Vector2){offsetx * 7.61, offsety * 16 - 40};
         sprintf(buffer, "%s", "sunken ships");
         DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
+        
         
         break;
     case ENDING:

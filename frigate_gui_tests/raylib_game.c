@@ -14,15 +14,37 @@ Music music = {0};
 Sound water = {0};
 Sound bomb = {0};
 
-char grid[100] = {0};
-
 const int ROWS = 20;
 const int COLS = 20;
+
+char grid[20][20] = {0};
+
 char buffer[10];
+Texture2D water_t = {0};
+Texture2D flame_t = {0};
+
+/*
+int grid_size;
+int shells = (grid_size * grid_size) >> 1;
+
+struct grid *sg = new_grid(grid_size);
+struct grid *ug = new_grid(grid_size);
+struct grid *ig = new_grid(grid_size);
+
+data_grid(sg, ig);
+water_grid(ug);
+
+
+
+
+
+*/
+
     
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
 //----------------------------------------------------------------------------------
+
 static const int screenHeight = 800;
 static const int screenWidth = 800;
 
@@ -65,6 +87,8 @@ int main(void) {
     music = LoadMusicStream("resources/tribe-drum-loop.mp3");
     water = LoadSound("resources/water.mp3");
     bomb = LoadSound("resources/bomb.mp3");
+    water_t = LoadTexture("resources/splash-icon.png");
+    flame_t = LoadTexture("resources/flame-icon.png");
 
     SetMusicVolume(music, 0.5f);
     PlayMusicStream(music);
@@ -78,7 +102,7 @@ int main(void) {
 
     for (int i = 0; i < COLS; i++) {
         for (int j = 0; j < ROWS; j++) {
-            grid[i + j] = 'm';
+            grid[i][j] = ' ';
         }
     }
     // Main game loop
@@ -101,6 +125,8 @@ int main(void) {
    UnloadMusicStream(music);
    UnloadSound(water);
    UnloadSound(bomb);
+   UnloadTexture(water_t);
+   UnloadTexture(flame_t);
 
    CloseAudioDevice();     // Close audio context
 

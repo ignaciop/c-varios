@@ -14,8 +14,11 @@ extern Sound bomb;
 extern const int ROWS;
 extern const int COLS;
 extern char buffer[10];
+extern Image water_img;
+extern Texture2D water_t;
+extern Texture2D flame_t;
 
-extern char grid[100];
+extern char grid[20][20];
     
 extern const int cellWidth;
 extern const int cellHeight;
