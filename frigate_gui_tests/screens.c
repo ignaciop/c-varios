@@ -133,10 +133,9 @@ void DrawScreen(GameScreen screen, int *shells) {
             for (int j = 0; j < ROWS; j++) {
               
                 DrawRectangle(offsetx+i * cellWidth, offsety+j * cellHeight, cellWidth, cellHeight, BLUE);
-                //DrawTextEx(font, buffer, pos2d, 20, 0, RAYWHITE);
-
                 
-                pos2d = (Vector2){i * cellWidth + cellWidth / 1.5, j * cellHeight + cellHeight / 1.5};
+                
+                pos2d = (Vector2){i * cellWidth + cellWidth / 1.6, j * cellHeight + cellHeight / 1.6};
             
                 if (grid[i][j] == 'm') {
                     DrawTextureEx(water_t, pos2d, 0, 0.2, WHITE);
@@ -148,14 +147,14 @@ void DrawScreen(GameScreen screen, int *shells) {
                 //DrawTextEx(font, buffer, pos2d, 22, 0, WHITE);
         
 
-                /*
+                
                 Vector2 mPos = GetMousePosition();
-                int indexI = mPos.x / cellWidth;
-                int indexJ = mPos.y / cellHeight;
+                int indexI = mPos.x / cellWidth - 1;
+                int indexJ = mPos.y / cellHeight - 1;
             
                 sprintf(buffer, "x = %i, y = %i", indexI, indexJ);
                 DrawTextEx(font, buffer, (Vector2){mPos.x + 5, mPos.y + 15}, 22, 0, BLACK);
-                */
+                
             
                 DrawRectangleLines(offsetx+i * cellWidth, offsety+j * cellHeight, cellWidth, cellHeight, DARKBLUE);
             }
