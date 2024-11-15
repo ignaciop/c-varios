@@ -1,9 +1,0 @@
-1. 1
-2. copy_str
-3. main
-4. ex5_valgrind
-5. 14
-6. 12
-7. 13
-8. Yes
-9. 12
