@@ -92,7 +92,7 @@ struct request *get_request(struct requests_queue *queue) {
     /* sanity check - make sure queue is not NULL */
     assert(queue);
     
-    struct request* a_request;      /* pointer to request. */
+    struct request* a_request = NULL;      /* pointer to request. */
 
     /* lock the mutex, to assure exclusive access to the list */
     int rc = pthread_mutex_lock(queue->p_mutex);
@@ -107,8 +107,6 @@ struct request *get_request(struct requests_queue *queue) {
 	
 	    /* decrease the total number of pending requests */
 	    queue->num_requests--;
-    } else { /* requests list is empty */
-	    a_request = NULL;
     }
 
     /* unlock mutex */
@@ -149,7 +147,7 @@ void delete_requests_queue(struct requests_queue *queue) {
     /* sanity check - make sure queue is not NULL */
     assert(queue);
     
-    struct request *a_request;      /* pointer to a request. */
+    struct request *a_request = NULL;      /* pointer to a request. */
 
     /* first free any requests that might be on the queue */
     while (queue->num_requests > 0) {
