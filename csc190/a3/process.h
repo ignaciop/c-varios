@@ -1,10 +1,6 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-
 struct process{
 	int pid; /* must be unique */	
 	int mem_used; /* memory_used must not exceed MAX_MEM */
@@ -29,7 +25,7 @@ void print_stack(struct stack *head);
 
 /* Provided to students: queue */
 void enqueue(struct process *to_enqueue, struct queue **front);
-struct process* dequeue(struct queue **front);
+struct process *dequeue(struct queue **front);
 void print_queue(struct queue *head);
 struct queue* peek(struct queue **front);
 
@@ -38,7 +34,7 @@ void print_process(struct process *root);
 void print_preorder(struct process *root);
 
 /* Part one methods */
-struct process* make_process(int pid, int mem_used);
+struct process *make_process(int pid, int mem_used);
 void print_postorder(struct process *root);
 void print_inorder(struct process *root);
 void print_levelorder(struct process *root);

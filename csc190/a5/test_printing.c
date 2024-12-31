@@ -1,29 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "disease_model.h"
 
-int main(int argv, char* argc[])
-{
-	// Part One: reading in the files
+int main(int argv, char* argc[]) {
+	/* Part One: reading in the files */
 
-	// read the file in and store it a a graph
+	printf("%s\n", "Printing tiny_pop:");
 	struct graph *tiny_pop = read_file("tiny_population.txt");
-
-	printf("Printing tiny_pop:\n"); 
 	print_graph(tiny_pop);
-
-	printf("\nPrinting small_pop:\n"); 
+	print_stats(tiny_pop);
+    
+	printf("\n%s\n", "Printing small_pop:"); 
 	struct graph *small_pop = read_file("small_population.txt");
 	print_graph(small_pop);
+	print_stats(small_pop);
 
-	printf("\nPrinting medium_pop:\n"); 
+	printf("\n%s\n", "Printing medium_pop:"); 
 	struct graph *medium_pop = read_file("medium_population.txt");
 	print_graph(medium_pop);
+	print_stats(medium_pop);
 
-	printf("\nStats for large_pop:\n"); 
+	printf("\n%s\n", "Stats for large_pop:"); 
 	struct graph *large_pop = read_file("large_population.txt");
 	print_stats(large_pop);
 
-	printf("\nStats for huge_pop:\n"); 
+	printf("\n%s\n", "Stats for huge_pop:"); 
 	struct graph *huge_pop = read_file("huge_population.txt");
 	print_stats(huge_pop);
 
@@ -32,7 +34,8 @@ int main(int argv, char* argc[])
 	remove_all(&medium_pop);
 	remove_all(&large_pop);
 	remove_all(&huge_pop);
-	return 0;
+	
+	return EXIT_SUCCESS;
 }
 
 /* Expected output:

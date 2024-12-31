@@ -1,9 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+
 #include "process.h"
 
 int main(int argc, const char * argv[]) {
     if (argc != 3) {
         printf("%s\n", "Please enter only the first PID and maximum size of memory.");
-        return EXIT_SUCCESS;
+        
+        exit(EXIT_FAILURE);
     }
     
 	/* first tree */
