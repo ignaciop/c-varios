@@ -201,27 +201,28 @@ void propagate_once(struct graph **pop, double p_transmit) {
         for (int i = 0; i < gn; i++) {
             struct person *p = (*pop)->nodes[i];
             
-            int *p_connections = (*pop)->connections[i];
+            if (p->status == 'I') {
             
-            for (int j = 0; j < gn; j++) {
-                if (i != j) {
-                    int connection = p_connections[j];
-                    
-                    struct person *partner = (*pop)->nodes[j];
-                    
-                    if (connection == 1 && partner->status == 'I') {
-                        double prob_inf = (double)rand() / RAND_MAX;
+                int *p_connections = (*pop)->connections[i];
+                
+                 for (int j = 0; j < gn; j++) {
+                    // Ensure we don't try to infect the person with themselves
+                    if (i != j && p_connections[j] == 1) {
+                        struct person *partner = (*pop)->nodes[j];
                         
-                        if (prob_inf < p_transmit) {
-                            p->status = 'I';
-                            break;
+                        // Only propagate the disease to susceptible people
+                        if (partner->status == 'S') {
+                            double prob_inf = (double)rand() / RAND_MAX;  // Random number between 0 and 1
+                            
+                            // Infect if the random value is less than the transmission probability
+                            if (prob_inf < p_transmit) {
+                                partner->status = 'I';
+                            }
                         }
                     }
                 }
-            }
-            
-            if (p->status == 'I') {
-                p->infect_count++;
+               
+                ++p->infect_count;
             }
         }
     }
