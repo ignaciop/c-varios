@@ -1,0 +1,171 @@
+* (TEST 11) set_display_from_batt() Full Battery : ok
+** COMMENTS
+
+
+** Test Segment 1 : ok
+** set_display_from_batt() 4.22 V
+
+*** PROGRAM: ./test_batt_update "set_display_from_batt() 4.22 V"
+To run this individual test in GDB use the command:
+gdb --args ./test_batt_update "set_display_from_batt() 4.22 V"
+but any input to the program must be typed within the debugger
+
+*** FAILURE MESSAGES
+None
+
+*** SIDE-BY-SIDE DIFF of Expected vs Actual
+. lines match; | lines differ; < expected line missing; > extra line in actual
+
+#+BEGIN_SRC sdiff
+===EXPECT===                                                 ===ACTUAL===
+{                                                          . {
+    // Show 4.22 Volts                                     .     // Show 4.22 Volts
+    BATT_VOLTAGE_PORT = -1;                                .     BATT_VOLTAGE_PORT = -1;
+    BATT_STATUS_PORT  = -1;                                .     BATT_STATUS_PORT  = -1;
+    BATT_DISPLAY_PORT = -1;                                .     BATT_DISPLAY_PORT = -1;
+    batt_t batt = {                                        .     batt_t batt = {
+      .mlvolts = 4217,                                     .       .mlvolts = 4217,
+      .percent = 100,                                      .       .percent = 100,
+      .mode = 2,                                           .       .mode = 2,
+    };                                                     .     };
+    int ret = set_display_from_batt(batt, dispint);        .     int ret = set_display_from_batt(batt, dispint);
+    printf("ret: %d\n",ret);                               .     printf("ret: %d\n",ret);
+    printf("%-18s : %s\n%-18s : %s\n",                     .     printf("%-18s : %s\n%-18s : %s\n",
+           "dispint bits", bitstr(*dispint, INT_BITS),     .            "dispint bits", bitstr(*dispint, INT_BITS),
+           "index", bitstr_index(INT_BITS));               .            "index", bitstr_index(INT_BITS));
+    printf("\n");  print_ports();  printf("\n");           .     printf("\n");  print_ports();  printf("\n");
+    BATT_DISPLAY_PORT = *dispint;                          .     BATT_DISPLAY_PORT = *dispint;
+    printf("Display based on dispint:\n");                 .     printf("Display based on dispint:\n");
+    print_batt_display();                                  .     print_batt_display();
+}                                                          . }
+---OUTPUT---                                               . ---OUTPUT---
+ret: 0                                                     . ret: 0
+dispint bits       : 000 11111 1100110 1011011 1011011 110 . dispint bits       : 000 11111 1100110 1011011 1011011 110
+index              :  29    24      17      10       3   0 . index              :  29    24      17      10       3   0
+                                                           . 
+BATT_VOLTAGE_PORT  : -1                                    . BATT_VOLTAGE_PORT  : -1
+BATT_STATUS_PORT   : 111 11111                             . BATT_STATUS_PORT   : 111 11111
+BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111 . BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111
+index              :  29    24      17      10       3   0 . index              :  29    24      17      10       3   0
+                                                           . 
+Display based on dispint:                                  . Display based on dispint:
++-^^^-+  #  #   ####  ####                                 . +-^^^-+  #  #   ####  ####     
+|#####|  #  #      #     #                                 . |#####|  #  #      #     #     
+|#####|  #  #      #     #                                 . |#####|  #  #      #     #     
+|#####|  ####   ####  ####  V                              . |#####|  ####   ####  ####  V  
+|#####|     #   #     #                                    . |#####|     #   #     #        
+|#####|     #   #     #                                    . |#####|     #   #     #        
++-----+     # o ####  ####                                 . +-----+     # o ####  ####     
+
+#+END_SRC
+
+*** LINE-BY-LINE DIFF of Expected vs Actual
+No differences found
+
+*** VALGRIND REPORT
+The program is run on under valgrind as
+stdbuf -i 0 -o 0 -e 0 valgrind --error-exitcode=13 --leak-check=full --show-leak-kinds=all --track-origins=yes ./test_batt_update set_display_from_batt() 4.22 V
+which may be pasted onto a command line to run it.
+
+#+BEGIN_SRC text
+==48124== Memcheck, a memory error detector
+==48124== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==48124== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==48124== Command: ./test_batt_update set_display_from_batt()\ 4.22\ V
+==48124== 
+==48124== 
+==48124== HEAP SUMMARY:
+==48124==     in use at exit: 0 bytes in 0 blocks
+==48124==   total heap usage: 1 allocs, 1 frees, 4 bytes allocated
+==48124== 
+==48124== All heap blocks were freed -- no leaks are possible
+==48124== 
+==48124== For lists of detected and suppressed errors, rerun with: -s
+==48124== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+#+END_SRC
+
+** Test Segment 2 : ok
+** set_display_from_batt() 100 %
+
+*** PROGRAM: ./test_batt_update "set_display_from_batt() 100 %"
+To run this individual test in GDB use the command:
+gdb --args ./test_batt_update "set_display_from_batt() 100 %"
+but any input to the program must be typed within the debugger
+
+*** FAILURE MESSAGES
+None
+
+*** SIDE-BY-SIDE DIFF of Expected vs Actual
+. lines match; | lines differ; < expected line missing; > extra line in actual
+
+#+BEGIN_SRC sdiff
+===EXPECT===                                                             ===ACTUAL===
+{                                                                      . {
+    // Show 100%, the only case in which the hundreds digit of percent .     // Show 100%, the only case in which the hundreds digit of percent
+    // is used.                                                        .     // is used.
+    BATT_VOLTAGE_PORT = -1;                                            .     BATT_VOLTAGE_PORT = -1;
+    BATT_STATUS_PORT  = -1;                                            .     BATT_STATUS_PORT  = -1;
+    BATT_DISPLAY_PORT = -1;                                            .     BATT_DISPLAY_PORT = -1;
+    batt_t batt = {                                                    .     batt_t batt = {
+      .mlvolts = 4217,                                                 .       .mlvolts = 4217,
+      .percent = 100,                                                  .       .percent = 100,
+      .mode = 1,                                                       .       .mode = 1,
+    };                                                                 .     };
+    int ret = set_display_from_batt(batt, dispint);                    .     int ret = set_display_from_batt(batt, dispint);
+    printf("ret: %d\n",ret);                                           .     printf("ret: %d\n",ret);
+    printf("%-18s : %s\n%-18s : %s\n",                                 .     printf("%-18s : %s\n%-18s : %s\n",
+           "dispint bits", bitstr(*dispint, INT_BITS),                 .            "dispint bits", bitstr(*dispint, INT_BITS),
+           "index", bitstr_index(INT_BITS));                           .            "index", bitstr_index(INT_BITS));
+    printf("\n");  print_ports();  printf("\n");                       .     printf("\n");  print_ports();  printf("\n");
+    BATT_DISPLAY_PORT = *dispint;                                      .     BATT_DISPLAY_PORT = *dispint;
+    printf("Display based on dispint:\n");                             .     printf("Display based on dispint:\n");
+    print_batt_display();                                              .     print_batt_display();
+}                                                                      . }
+---OUTPUT---                                                           . ---OUTPUT---
+ret: 0                                                                 . ret: 0
+dispint bits       : 000 11111 0000110 0111111 0111111 001             . dispint bits       : 000 11111 0000110 0111111 0111111 001
+index              :  29    24      17      10       3   0             . index              :  29    24      17      10       3   0
+                                                                       . 
+BATT_VOLTAGE_PORT  : -1                                                . BATT_VOLTAGE_PORT  : -1
+BATT_STATUS_PORT   : 111 11111                                         . BATT_STATUS_PORT   : 111 11111
+BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111             . BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111
+index              :  29    24      17      10       3   0             . index              :  29    24      17      10       3   0
+                                                                       . 
+Display based on dispint:                                              . Display based on dispint:
++-^^^-+     #   ####  ####                                             . +-^^^-+     #   ####  ####     
+|#####|     #   #  #  #  #                                             . |#####|     #   #  #  #  #     
+|#####|     #   #  #  #  #                                             . |#####|     #   #  #  #  #     
+|#####|     #   #  #  #  #                                             . |#####|     #   #  #  #  #     
+|#####|     #   #  #  #  #  %                                          . |#####|     #   #  #  #  #  %  
+|#####|     #   #  #  #  #                                             . |#####|     #   #  #  #  #     
++-----+     #   ####  ####                                             . +-----+     #   ####  ####     
+
+#+END_SRC
+
+*** LINE-BY-LINE DIFF of Expected vs Actual
+No differences found
+
+*** VALGRIND REPORT
+The program is run on under valgrind as
+stdbuf -i 0 -o 0 -e 0 valgrind --error-exitcode=13 --leak-check=full --show-leak-kinds=all --track-origins=yes ./test_batt_update set_display_from_batt() 100 %
+which may be pasted onto a command line to run it.
+
+#+BEGIN_SRC text
+==48146== Memcheck, a memory error detector
+==48146== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==48146== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==48146== Command: ./test_batt_update set_display_from_batt()\ 100\ %
+==48146== 
+==48146== 
+==48146== HEAP SUMMARY:
+==48146==     in use at exit: 0 bytes in 0 blocks
+==48146==   total heap usage: 1 allocs, 1 frees, 4 bytes allocated
+==48146== 
+==48146== All heap blocks were freed -- no leaks are possible
+==48146== 
+==48146== For lists of detected and suppressed errors, rerun with: -s
+==48146== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+#+END_SRC
+
+** SUMMARY
+Test Passed

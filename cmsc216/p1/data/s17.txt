@@ -1,0 +1,10 @@
+time_1 91
+time_2 57
+time_3 27
+time_4 56
+time_5 51
+time_6 54
+time_7 32
+time_8 50
+time_9 32
+time_10 93

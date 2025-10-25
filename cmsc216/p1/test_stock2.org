@@ -1,0 +1,998 @@
+#+TITLE: Problem 2 Remaining Functions in stock_funcs.c
+#+TESTY: PREFIX="prob2"
+#+TESTY: USE_VALGRIND=1
+
+* stock_set_hilo1
+#+TESTY: program='./test_stock_funcs stock_set_hilo1'
+#+BEGIN_SRC sh
+{
+    // Checks if stock_set_hilo() correctly sets the lo_index and
+    // hi_index fields in a small prices array
+    double prices[5] = {
+      168.00, 16.03, 14.11, 50.00, 96.89,
+    };
+    stock_t stock = {
+      .data_file = "5prices.txt",
+      .count = 5,
+      .prices = prices,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    stock_set_hilo(&stock);
+
+    stock_print(&stock);
+}
+==STOCK DATA==
+data_file: 5prices.txt
+count: 5
+prices: [168.00, 16.03, 14.11, ...]
+lo_index:  2
+hi_index:  0
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* stock_set_hilo2
+#+TESTY: program='./test_stock_funcs stock_set_hilo2'
+#+BEGIN_SRC sh
+{
+    // Checks if stock_set_hilo() correctly sets the lo_index and
+    // hi_index fields in a larger prices array
+    double prices[10] = {
+      125.72, 190.04, 45.25, 32.37, 40.99, 
+      168.00, 16.03, 14.11, 50.00, 96.89,
+    };
+    stock_t *stock = stock_new();
+
+    stock->data_file = strdup("bouncy-prices.txt");
+    stock->count = 10;
+    stock->prices = malloc(sizeof(double)*10);
+    memcpy(stock->prices, prices, sizeof(double)*10);
+    stock->lo_index =  -1;
+    stock->hi_index =  -1;
+    stock->best_buy  = -1;
+    stock->best_sell = -1;
+
+    stock_set_hilo(stock);
+    stock_print(stock);
+
+    stock_free(stock);
+}
+==STOCK DATA==
+data_file: bouncy-prices.txt
+count: 10
+prices: [125.72, 190.04, 45.25, ...]
+lo_index:  7
+hi_index:  1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* stock_set_hilo3
+#+TESTY: program='./test_stock_funcs stock_set_hilo3'
+#+BEGIN_SRC sh
+{
+    // Checks behavior of stock_set_hilo() in length 0 and length 1
+    // arrays
+    double prices0[0] = {};
+    stock_t stock0 = {
+      .data_file = "0prices.txt",
+      .count = 0,
+      .prices = prices0,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    stock_set_hilo(&stock0);
+    stock_print(&stock0);
+
+    double prices1[1] = {123.45};
+    stock_t stock1 = {
+      .data_file = "1prices.txt",
+      .count = 1,
+      .prices = prices1,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    stock_set_hilo(&stock1);
+    stock_print(&stock1);
+}
+==STOCK DATA==
+data_file: 0prices.txt
+count: 0
+prices: []
+lo_index:  -1
+hi_index:  -1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+==STOCK DATA==
+data_file: 1prices.txt
+count: 1
+prices: [123.45]
+lo_index:  0
+hi_index:  0
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* stock_set_best1
+#+TESTY: program='./test_stock_funcs stock_set_best1'
+#+BEGIN_SRC sh
+{
+    // Checks for correct setting of best buy/sell point which aligns
+    // with the stock min/max prices in this test
+    double prices[9] = {
+      45.0, 35.0, 25.0, 15.0, 5.0,
+      10.0, 20.0, 30.0, 7.0,
+    };
+    stock_t stock = {
+      .data_file = "prices.txt",
+      .count = 9,
+      .prices = prices,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    int ret = stock_set_best(&stock);
+    stock_set_hilo(&stock);
+    printf("ret: %d\n", ret);
+    stock_print(&stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: prices.txt
+count: 9
+prices: [45.00, 35.00, 25.00, ...]
+lo_index:  4
+hi_index:  0
+best_buy:  4
+best_sell: 7
+profit:    25.00
+{
+    // Checks for correct setting of best buy/sell point; in this case
+    // the best buy does not match the minimum price but the best sell
+    // point does match the maximum
+    double prices[10] = {
+      30.0, 20.0, 30.0, 40.0, 50.0,
+      45.0, 35.0, 25.0, 15.0, 5.0,
+    };
+    stock_t stock = {
+      .data_file = "prices.txt",
+      .count = 10,
+      .prices = prices,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    int ret = stock_set_best(&stock);
+    stock_set_hilo(&stock);
+    printf("ret: %d\n", ret);
+    stock_print(&stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: prices.txt
+count: 10
+prices: [30.00, 20.00, 30.00, ...]
+lo_index:  9
+hi_index:  4
+best_buy:  1
+best_sell: 4
+profit:    30.00
+#+END_SRC
+
+* stock_set_best2
+#+TESTY: program='./test_stock_funcs stock_set_best2'
+#+BEGIN_SRC sh
+{
+    // Checks for correct setting of best buy/sell point; in this case
+    // the best buy does matches the minimum price but the best sell
+    // point does not match the maximum
+    double prices[13] = {
+      50.0, 45.0, 25.0, 10.0, 12.0,
+      15.0, 35.0, 34.0, 18.5, 16.5,
+      15.5, 10.5,
+    };
+    stock_t stock = {
+      .data_file = "prices.txt",
+      .count = 13,
+      .prices = prices,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    int ret = stock_set_best(&stock);
+    stock_set_hilo(&stock);
+    printf("ret: %d\n", ret);
+    stock_print(&stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: prices.txt
+count: 13
+prices: [50.00, 45.00, 25.00, ...]
+lo_index:  12
+hi_index:  0
+best_buy:  3
+best_sell: 6
+profit:    25.00
+#+END_SRC
+
+* stock_set_best3
+#+TESTY: program='./test_stock_funcs stock_set_best2'
+#+BEGIN_SRC sh
+{
+    // Checks for correct setting of best buy/sell point; in this case
+    // the best buy does matches the minimum price but the best sell
+    // point does not match the maximum
+    double prices[13] = {
+      50.0, 45.0, 25.0, 10.0, 12.0,
+      15.0, 35.0, 34.0, 18.5, 16.5,
+      15.5, 10.5,
+    };
+    stock_t stock = {
+      .data_file = "prices.txt",
+      .count = 13,
+      .prices = prices,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    int ret = stock_set_best(&stock);
+    stock_set_hilo(&stock);
+    printf("ret: %d\n", ret);
+    stock_print(&stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: prices.txt
+count: 13
+prices: [50.00, 45.00, 25.00, ...]
+lo_index:  12
+hi_index:  0
+best_buy:  3
+best_sell: 6
+profit:    25.00
+#+END_SRC
+
+* stock_set_best4
+#+TESTY: program='./test_stock_funcs stock_set_best4'
+#+BEGIN_SRC sh
+{
+    // Checks that when there is no profitable time to buy/sell
+    // (profit of 0.0), then the best_buy / best_sell are set to -1
+    // and the function returns -1
+    double prices[8] = {
+      50.0, 45.0, 30.0, 22.0, 18.0,
+      15.0, 10.5, 8.5,
+    };
+    stock_t stock = {
+      .data_file = "prices.txt",
+      .count = 8,
+      .prices = prices,
+      .lo_index =  -1,
+      .hi_index =  -1,
+      .best_buy  = 0,
+      .best_sell = 0,
+    };
+    int ret = stock_set_best(&stock);
+    stock_set_hilo(&stock);
+    printf("ret: %d\n", ret);
+    stock_print(&stock);
+}
+ret: -1
+==STOCK DATA==
+data_file: prices.txt
+count: 8
+prices: [50.00, 45.00, 30.00, ...]
+lo_index:  7
+hi_index:  0
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* count_lines
+#+TESTY: program='./test_stock_funcs count_lines'
+#+BEGIN_SRC sh
+{
+    // Checks several calls to count_lines() on different files in the
+    // data/ directory.  This directory must be present with the
+    // provided data files for the tests to work correctly.
+    int ret = count_lines("data/stock-3only.txt");
+    printf("ret: %d\n", ret);
+}
+ret: 3
+{
+    int ret = count_lines("data/stock-ascending.txt");
+    printf("ret: %d\n", ret);
+}
+ret: 10
+{
+    int ret = count_lines("data/stock-FB-08-02-2021.txt");
+    printf("ret: %d\n", ret);
+}
+ret: 543
+{
+    int ret = count_lines("data/stock-empty.txt");
+    printf("ret: %d\n", ret);
+}
+ret: 0
+{
+    int ret = count_lines("data/not-there.txt");
+    printf("ret: %d\n", ret);
+}
+Could not open file 'data/not-there.txt', cannot count lines
+ret: -1
+#+END_SRC
+
+* stock_load1
+#+TESTY: program='./test_stock_funcs stock_load1'
+#+BEGIN_SRC sh
+{
+    // Checks stock_load() on a small data file to determine if it
+    // correctly loads a small number of prices into an existing
+    // stock.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock, "data/stock-3only.txt");
+    printf("ret: %d\n", ret);
+    stock_print(stock);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-3only.txt
+count: 3
+prices: [103.07, 45.26, 59.43]
+lo_index:  -1
+hi_index:  -1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* stock_load2
+#+TESTY: program='./test_stock_funcs stock_load2'
+#+BEGIN_SRC sh
+{
+    // Checks loading a stock file via stock_load() on a file in the
+    // data/ directory.  This directory must be present with the
+    // provided data files for the tests to work correctly.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock, "data/stock-jagged.txt");
+    printf("ret: %d\n", ret);
+    stock_print(stock);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-jagged.txt
+count: 15
+prices: [103.00, 250.00, 133.00, ...]
+lo_index:  -1
+hi_index:  -1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* stock_load3
+#+TESTY: program='./test_stock_funcs stock_load3'
+#+BEGIN_SRC sh
+{
+    // Checks loading a stock file via stock_load() on a file in the
+    // data/ directory.  This directory must be present with the
+    // provided data files for the tests to work correctly.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock, "data/stock-GOOG-08-02-2021.txt");
+    printf("ret: %d\n", ret);
+    stock_print(stock);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-GOOG-08-02-2021.txt
+count: 345
+prices: [2715.00, 2715.00, 2711.00, ...]
+lo_index:  -1
+hi_index:  -1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* stock_load pathological
+#+TESTY: program='./test_stock_funcs stock_load_1price'
+#+BEGIN_SRC sh
+{
+    // stock_load() calls on price arrays of 1 
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock, "data/stock-1only.txt");
+    printf("ret: %d\n", ret);
+    stock_print(stock);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-1only.txt
+count: 1
+prices: [70.00]
+lo_index:  -1
+hi_index:  -1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+#+TESTY: program='./test_stock_funcs stock_load_empty'
+#+BEGIN_SRC sh
+{
+    // Load a completely empty stock file - should give count of 0 and
+    // an empty prices array.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock, "data/stock-empty.txt");
+    printf("ret: %d\n", ret);
+    stock_print(stock);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-empty.txt
+count: 0
+prices: []
+lo_index:  -1
+hi_index:  -1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+#+TESTY: program='./test_stock_funcs stock_load_no_file'
+#+BEGIN_SRC sh
+{
+    // Attempt to load a non-existent file which should fail and leave
+    // the stock struct un-altered.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock, "data/not-there.txt");
+    printf("ret: %d\n", ret);
+    stock_print(stock);
+    stock_free(stock);
+}
+Could not open file 'data/not-there.txt', cannot count lines
+Unable to open stock file 'data/not-there.txt', cannot load stock data
+ret: -1
+==STOCK DATA==
+data_file: NULL
+count: -1
+prices: NULL
+lo_index:  -1
+hi_index:  -1
+best_buy:  -1
+best_sell: -1
+profit:    0.00
+#+END_SRC
+
+* stock_plot1
+#+TESTY: program='./test_stock_funcs stock_plot1'
+#+BEGIN_SRC sh
+{
+    // Plots a stock with a small prices array that is NOT loaded from
+    // a file with a couple different heights. Prices and max_height are
+    // selected for an integer (non-fraction) plot step.
+    double prices[6] = {5.0, 15.0, 0.0, 10.0, 25.0, 20.0};
+    stock_t stock = {
+      .data_file = "a-data-file.txt",
+      .count = 6,
+      .prices = prices,
+      .lo_index  = 2,
+      .hi_index  = 4,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    stock_plot(&stock, 5, 0, stock.count);
+    printf("\n");
+    stock_plot(&stock, 25, 0, stock.count);
+}
+==PLOT DATA==
+start/stop:  0 6
+max_height:  5
+price range: 25.00
+plot step:   5.00
+           +------+
+     20.00 |    H*|
+     15.00 | *  H*|
+     10.00 | * *H*|
+      5.00 |** *H*|
+      0.00 |**L*H*|
+           +^----^+
+            0    5    
+
+==PLOT DATA==
+start/stop:  0 6
+max_height:  25
+price range: 25.00
+plot step:   1.00
+           +------+
+     24.00 |    H |
+     23.00 |    H |
+     22.00 |    H |
+     21.00 |    H |
+     20.00 |    H*|
+     19.00 |    H*|
+     18.00 |    H*|
+     17.00 |    H*|
+     16.00 |    H*|
+     15.00 | *  H*|
+     14.00 | *  H*|
+     13.00 | *  H*|
+     12.00 | *  H*|
+     11.00 | *  H*|
+     10.00 | * *H*|
+      9.00 | * *H*|
+      8.00 | * *H*|
+      7.00 | * *H*|
+      6.00 | * *H*|
+      5.00 |** *H*|
+      4.00 |** *H*|
+      3.00 |** *H*|
+      2.00 |** *H*|
+      1.00 |** *H*|
+      0.00 |**L*H*|
+           +^----^+
+            0    5    
+#+END_SRC
+
+* stock_plot2
+#+TESTY: program='./test_stock_funcs stock_plot2'
+#+BEGIN_SRC sh
+{
+    // Similar to previous test but this time with non-integer plot
+    // step for vertical bars.
+    double prices[5] = {5.0, 25.0, 10.0, 0.0, 15.0};
+    stock_t stock = {
+      .data_file = "b-data-file.txt",
+      .count = 5,
+      .prices = prices,
+      .lo_index  = 3,
+      .hi_index  = 1,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    stock_plot(&stock, 6, 0, stock.count);
+    printf("\n");
+    stock_plot(&stock, 12, 0, stock.count);
+}
+==PLOT DATA==
+start/stop:  0 5
+max_height:  6
+price range: 25.00
+plot step:   4.17
+           +-----+
+     20.83 | H   |
+     16.67 | H   |
+     12.50 | H  *|
+      8.33 | H* *|
+      4.17 |*H* *|
+      0.00 |*H*L*|
+           +^----+
+            0    
+
+==PLOT DATA==
+start/stop:  0 5
+max_height:  12
+price range: 25.00
+plot step:   2.08
+           +-----+
+     22.92 | H   |
+     20.83 | H   |
+     18.75 | H   |
+     16.67 | H   |
+     14.58 | H  *|
+     12.50 | H  *|
+     10.42 | H  *|
+      8.33 | H* *|
+      6.25 | H* *|
+      4.17 |*H* *|
+      2.08 |*H* *|
+      0.00 |*H*L*|
+           +^----+
+            0    
+#+END_SRC
+
+* stock_plot3
+#+TESTY: program='./test_stock_funcs stock_plot3'
+#+BEGIN_SRC sh
+{
+    // Print full plot then print a slice from index 2 to 6. Checks if
+    // the bottom axis and axis numbers are printed correctly. 
+    double prices[7] = {5.0, 15.0, 0.0, 10.0, 25.0, 20.0, 17.0};
+    stock_t stock = {
+      .data_file = "c-data-file.txt",
+      .count = 7,
+      .prices = prices,
+      .lo_index  = 2,
+      .hi_index  = 4,
+      .best_buy  = -1,
+      .best_sell = -1,
+    };
+    stock_plot(&stock, 10, 0, stock.count);
+    printf("\n");
+    stock_plot(&stock, 10, 2, 6);
+}
+==PLOT DATA==
+start/stop:  0 7
+max_height:  10
+price range: 25.00
+plot step:   2.50
+           +-------+
+     22.50 |    H  |
+     20.00 |    H* |
+     17.50 |    H* |
+     15.00 | *  H**|
+     12.50 | *  H**|
+     10.00 | * *H**|
+      7.50 | * *H**|
+      5.00 |** *H**|
+      2.50 |** *H**|
+      0.00 |**L*H**|
+           +^----^-+
+            0    5    
+
+==PLOT DATA==
+start/stop:  2 6
+max_height:  10
+price range: 25.00
+plot step:   2.50
+           +----+
+     22.50 |  H |
+     20.00 |  H*|
+     17.50 |  H*|
+     15.00 |  H*|
+     12.50 |  H*|
+     10.00 | *H*|
+      7.50 | *H*|
+      5.00 | *H*|
+      2.50 | *H*|
+      0.00 |L*H*|
+           +---^+
+               5    
+#+END_SRC
+
+* stock_plot4
+#+TESTY: program='./test_stock_funcs stock_plot4'
+#+BEGIN_SRC sh
+{
+    // Best Buy/Sell indices are set expect to see B and S characters
+    // on the top axis corresponding to the these positions. Buy/Sell
+    // positions do not correspond to Hi/Lo prices in this test.
+    double prices[5] = {5.0, 25.0, 10.0, 0.0, 15.0};
+    stock_t stock = {
+      .data_file = "b-data-file.txt",
+      .count = 5,
+      .prices = prices,
+      .lo_index  = 3,
+      .hi_index  = 1,
+      .best_buy  = 0,
+      .best_sell = 1,
+    };
+    stock_plot(&stock, 10, 0, stock.count);
+    printf("\n");
+    stock_plot(&stock, 5, 0, stock.count);
+}
+==PLOT DATA==
+start/stop:  0 5  
+max_height:  10
+price range: 25.00
+plot step:   2.50
+           +BS---+
+     22.50 | H   |
+     20.00 | H   |
+     17.50 | H   |
+     15.00 | H  *|
+     12.50 | H  *|
+     10.00 | H* *|
+      7.50 | H* *|
+      5.00 |*H* *|
+      2.50 |*H* *|
+      0.00 |*H*L*|
+           +^----+
+            0    
+
+==PLOT DATA==
+start/stop:  0 5  
+max_height:  5
+price range: 25.00
+plot step:   5.00
+           +BS---+
+     20.00 | H   |
+     15.00 | H  *|
+     10.00 | H* *|
+      5.00 |*H* *|
+      0.00 |*H*L*|
+           +^----+
+            0    
+#+END_SRC
+
+* stock_plot5
+#+TESTY: program='./test_stock_funcs stock_plot5'
+#+BEGIN_SRC sh
+{
+    // Loads a stock from a file and checks if they are printed
+    // correctly. Buy/Sell indices are separated so on the top axis
+    // should see a B====S corresponding to the range the stock is
+    // purchased. Buy/Sell correspond to Lo/Hi prices. Prints whole
+    // plot and then a slice of the plot.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock,"data/stock-valley.txt");
+    printf("ret: %d\n",ret);
+    stock_set_hilo(stock);
+    stock_set_best(stock);
+    stock_print(stock);
+    stock_plot(stock, 10, 0, stock->count);
+    printf("\n");
+    stock_plot(stock, 7, 3, stock->count-3);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-valley.txt
+count: 12
+prices: [100.00, 90.00, 80.00, ...]
+lo_index:  5
+hi_index:  11
+best_buy:  5
+best_sell: 11
+profit:    55.00
+==PLOT DATA==
+start/stop:  0 12
+max_height:  10
+price range: 55.00
+plot step:   5.50
+           +-----B=====S+
+     99.50 |*          H|
+     94.00 |*         *H|
+     88.50 |**        *H|
+     83.00 |**       **H|
+     77.50 |***      **H|
+     72.00 |***     ***H|
+     66.50 |****    ***H|
+     61.00 |****   ****H|
+     55.50 |*****  ****H|
+     50.00 |*****L*****H|
+           +^----^----^-+
+            0    5    10   
+
+==PLOT DATA==
+start/stop:  3 9
+max_height:  7
+price range: 55.00
+plot step:   7.86
+           +--B===+
+     97.14 |      |
+     89.29 |      |
+     81.43 |      |
+     73.57 |     *|
+     65.71 |*    *|
+     57.86 |**  **|
+     50.00 |**L***|
+           +--^---+
+              5    
+#+END_SRC
+
+* stock_plot6
+#+TESTY: program='./test_stock_funcs stock_plot6'
+#+BEGIN_SRC sh
+{
+    // Loads a stock from a file and checks if they are printed
+    // correctly. Buy/Sell indices are separated so on the top axis
+    // should see a B====S corresponding to the range the stock is
+    // purchased. Buy/Sell does NOT correspond to Lo/Hi prices. Prints
+    // whole plot and then a slice of the plot.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock,"data/stock-min-after-max.txt");
+    printf("ret: %d\n",ret);
+    stock_set_hilo(stock);
+    stock_set_best(stock);
+    stock_print(stock);
+    stock_plot(stock, 10, 0, stock->count);
+    printf("\n");
+    stock_plot(stock, 12, 3, stock->count-2);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-min-after-max.txt
+count: 15
+prices: [223.00, 292.00, 27.00, ...]
+lo_index:  10
+hi_index:  4
+best_buy:  2
+best_sell: 4
+profit:    296.00
+==PLOT DATA==
+start/stop:  0 15
+max_height:  10
+price range: 309.00
+plot step:   30.90
+           +--B=S----------+
+    292.10 |    H   *      |
+    261.20 | *  H   *      |
+    230.30 | *  H   *      |
+    199.40 |**  H * *      |
+    168.50 |**  H** *  *  *|
+    137.60 |**  H****  ****|
+    106.70 |**  H****  ****|
+     75.80 |** *H***** ****|
+     44.90 |** *H***** ****|
+     14.00 |****H*****L****|
+           +^----^----^----+
+            0    5    10   
+
+==PLOT DATA==
+start/stop:  3 13
+max_height:  12
+price range: 309.00
+plot step:   25.75
+           +=S--------+
+    297.25 | H   *    |
+    271.50 | H   *    |
+    245.75 | H   *    |
+    220.00 | H   *    |
+    194.25 | H * *    |
+    168.50 | H** *  * |
+    142.75 | H** *  **|
+    117.00 | H****  **|
+     91.25 |*H****  **|
+     65.50 |*H***** **|
+     39.75 |*H***** **|
+     14.00 |*H*****L**|
+           +--^----^--+
+              5    10   
+#+END_SRC
+
+* stock_plot7
+#+TESTY: program='./test_stock_funcs stock_plot7'
+#+BEGIN_SRC sh
+{
+    // Loads a stock from a file and checks if they are printed
+    // correctly. The file contains Tesla prices and two slices of the
+    // them are printed, around the time to buy and around the time to
+    // sell.
+    stock_t *stock = stock_new();
+    int ret = stock_load(stock,"data/stock-TSLA-08-12-2021.txt");
+    printf("ret: %d\n",ret);
+    stock_set_hilo(stock);
+    stock_set_best(stock);
+    stock_print(stock);
+    stock_plot(stock, 15, 125, 171);
+    printf("\n");
+    stock_plot(stock, 20, 482, 537);
+    stock_free(stock);
+}
+ret: 0
+==STOCK DATA==
+data_file: data/stock-TSLA-08-12-2021.txt
+count: 654
+prices: [706.00, 706.00, 705.38, ...]
+lo_index:  143
+hi_index:  522
+best_buy:  143
+best_sell: 522
+profit:    24.80
+==PLOT DATA==
+start/stop:  125 171
+max_height:  15
+price range: 24.80
+plot step:   1.65
+           +------------------B===========================+
+    724.18 |                                              |
+    722.52 |                                              |
+    720.87 |                                              |
+    719.22 |                                              |
+    717.57 |                                              |
+    715.91 |                                              |
+    714.26 |                                              |
+    712.61 |                                              |
+    710.95 |                                              |
+    709.30 |                                             *|
+    707.65 |                                         *****|
+    705.99 |*                                     ********|
+    704.34 |** *****                        **************|
+    702.69 |********** *              ********************|
+    701.03 |******************L***************************|
+           +^----^----^----^----^----^----^----^----^----^+
+            125  130  135  140  145  150  155  160  165  170  
+
+==PLOT DATA==
+start/stop:  482 537
+max_height:  20
+price range: 24.80
+plot step:   1.24
+           +========================================S--------------+
+    724.59 |                                     *  H******        |
+    723.35 |                   *  ****  ************H**************|
+    722.11 |       **** ** *************************H**************|
+    720.87 |     ***********************************H**************|
+    719.63 |****************************************H**************|
+    718.39 |****************************************H**************|
+    717.15 |****************************************H**************|
+    715.91 |****************************************H**************|
+    714.67 |****************************************H**************|
+    713.43 |****************************************H**************|
+    712.19 |****************************************H**************|
+    710.95 |****************************************H**************|
+    709.71 |****************************************H**************|
+    708.47 |****************************************H**************|
+    707.23 |****************************************H**************|
+    705.99 |****************************************H**************|
+    704.75 |****************************************H**************|
+    703.51 |****************************************H**************|
+    702.27 |****************************************H**************|
+    701.03 |****************************************H**************|
+           +---^----^----^----^----^----^----^----^----^----^----^-+
+               485  490  495  500  505  510  515  520  525  530  535  
+
+#+END_SRC
+
+* stock_demo
+Runs the provided stock_demo application which demonstrates all of the
+stock functions and checks for output.
+
+#+TESTY: program='./stock_demo'
+#+BEGIN_SRC sh
+PRINTING ALL PRICES HEIGHT 15
+==PLOT DATA==
+start/stop:  0 15
+max_height:  15
+price range: 309.00
+plot step:   20.60
+           +--B=S----------+
+    302.40 |    H   *      |
+    281.80 | *  H   *      |
+    261.20 | *  H   *      |
+    240.60 | *  H   *      |
+    220.00 |**  H   *      |
+    199.40 |**  H * *      |
+    178.80 |**  H** *  *   |
+    158.20 |**  H** *  ** *|
+    137.60 |**  H****  ****|
+    117.00 |**  H****  ****|
+     96.40 |**  H****  ****|
+     75.80 |** *H***** ****|
+     55.20 |** *H***** ****|
+     34.60 |** *H***** ****|
+     14.00 |****H*****L****|
+           +^----^----^----+
+            0    5    10   
+PRINTING PRICES 5 to 10 HEIGHT 8
+==PLOT DATA==
+start/stop:  5 10
+max_height:  8
+price range: 309.00
+plot step:   38.62
+           +-----+
+    284.38 |   * |
+    245.75 |   * |
+    207.12 |   * |
+    168.50 |** * |
+    129.88 |**** |
+     91.25 |**** |
+     52.62 |*****|
+     14.00 |*****|
+           +^----+
+            5    
+#+END_SRC
+

@@ -1,0 +1,383 @@
+#+TITLE: Problem 4 stock_multimain
+#+TESTY: PREFIX="prob4"
+#+TESTY: USE_VALGRIND=1
+
+* stock_multimain 10 Single Stock
+Runs the ~stock_multimain~ program on a the file data/stock-jagged.txt
+to see if the correct output is produced. This run is a single stock
+rather than multiple stocks
+
+#+TESTY: program='./stock_multimain 10 data/stock-jagged.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  10
+stop_count:  15
+min price:   38.00
+max price:   270.00
+price range: 232.00
+plot step:   23.20
+==LEGEND==
+a : data/stock-jagged.txt
+
+           +---------------+
+    246.80 | a        aA   |
+    223.60 | a    a   aA   |
+    200.40 | a    a   aA   |
+    177.20 | a    a   aA   |
+    154.00 | a  a a   aA   |
+    130.80 | aaaa a   aA   |
+    107.60 | aaaa a   aA   |
+     84.40 |aaaaaaa   aA  a|
+     61.20 |aaaaaaa   aA aa|
+     38.00 |aaaaaaaaAaaAaaa|
+           +^----^----^----+
+            0    5    10   
+#+END_SRC
+
+* stock_multimain 15 Two Stocks Equal Length
+Runs the ~stock_multimain~ program on a two input files to see if the
+correct output is produced. The input files have the same length so
+all columns of plotting will be filled with all stocks.
+
+#+TESTY: program='./stock_multimain 15 data/stock-jagged.txt data/stock-min-after-max.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  15
+stop_count:  15
+min price:   14.00
+max price:   323.00
+price range: 309.00
+plot step:   20.60
+==LEGEND==
+a : data/stock-jagged.txt
+b : data/stock-min-after-max.txt
+
+           +------------------------------+
+    302.40 |         B       b            |
+    281.80 |   b     B       b            |
+    261.20 |   b     B       b    A       |
+    240.60 |  ab     B       b  a A       |
+    220.00 | bab     B  a    b  a A       |
+    199.40 | bab     B  ab   b  a A       |
+    178.80 | bab     B bab   b  a Ab      |
+    158.20 | bab    aB bab   b  a Ab b   b|
+    137.60 | bab  a aB bab b b  a Ab b b b|
+    117.00 | baba a aB bab b b  a Ab b b b|
+     96.40 |ababa a aB bab b b  a Ab b bab|
+     75.80 |ababa abaBabab b b ba Ab b bab|
+     55.20 |ababa abaBababab b ba Abababab|
+     34.60 |ababa abaBabababAbaba Abababab|
+     14.00 |ababababaBabababAbabaBAbababab|
+           +^---------^---------^---------+
+            0         5         10        
+#+END_SRC
+
+* stock_multimain 12 Two Stocks Unequal Length
+Runs the ~stock_multimain~ program on a two input files to see if the
+correct output is produced. The input files have different lengths so
+some ending columns for one stock will be blank while the other stock
+has bars.
+
+#+TESTY: program='./stock_multimain 20 data/stock-jagged.txt data/stock-ascending.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  20
+stop_count:  15
+min price:   10.00
+max price:   270.00
+price range: 260.00
+plot step:   13.00
+==LEGEND==
+a : data/stock-jagged.txt
+b : data/stock-ascending.txt
+
+           +------------------------------+
+    257.00 |                      A       |
+    244.00 |  a                 a A       |
+    231.00 |  a         a       a A       |
+    218.00 |  a         a       a A       |
+    205.00 |  a         a       a A       |
+    192.00 |  a         a       a A       |
+    179.00 |  a         a       a A       |
+    166.00 |  a     a   a       a A       |
+    153.00 |  a     a   a       a A       |
+    140.00 |  a   a a   a       a A       |
+    127.00 |  a a a a   a       a A       |
+    114.00 |  a a a a   a       a A       |
+    101.00 |a a a a a   a       a A     a |
+     88.00 |a a a a a a a    b Ba A     a |
+     75.00 |a a a a a a a  b b Ba A     a |
+     62.00 |a a a a a a ab b b Ba A   a a |
+     49.00 |a a a a abababab b Ba A a a a |
+     36.00 |a a a abababababAbaBa A a a a |
+     23.00 |a a ababababababAbaBa A a a a |
+     10.00 |aBabababababababAbaBa A a a a |
+           +^---------^---------^---------+
+            0         5         10        
+#+END_SRC
+
+* stock_multimain 13 Three Stocks Unequal Length
+Runs the ~stock_multimain~ program on a three input files to see if
+the correct output is produced. The input files have different lengths
+so some ending columns for one stock will be blank while the other
+stock has bars.
+
+#+TESTY: program='./stock_multimain 20 data/stock-valley.txt data/stock-jagged.txt data/stock-ascending.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  20
+stop_count:  15
+min price:   10.00
+max price:   270.00
+price range: 260.00
+plot step:   13.00
+==LEGEND==
+a : data/stock-valley.txt
+b : data/stock-jagged.txt
+c : data/stock-ascending.txt
+
+           +---------------------------------------------+
+    257.00 |                                  B          |
+    244.00 |    b                          b  B          |
+    231.00 |    b              b           b  B          |
+    218.00 |    b              b           b  B          |
+    205.00 |    b              b           b  B          |
+    192.00 |    b              b           b  B          |
+    179.00 |    b              b           b  B          |
+    166.00 |    b        b     b           b  B          |
+    153.00 |    b        b     b           b  B          |
+    140.00 |    b     b  b     b           b  B          |
+    127.00 |    b  b  b  b     b           b  B          |
+    114.00 |    b  b  b  b     b           b  B          |
+    101.00 | b  b  b  b  b     b           b AB        b |
+     88.00 |ab ab  b  b  b  b  b      c  Cab AB        b |
+     75.00 |ab ab ab  b  b  b  b   ca ca Cab AB        b |
+     62.00 |ab ab ab ab  b  b  bca ca ca Cab AB     b  b |
+     49.00 |ab ab ab ab abcAbcabcabca ca Cab AB  b  b  b |
+     36.00 |ab ab ab abcabcAbcabcabcaBcabCab AB  b  b  b |
+     23.00 |ab ab abcabcabcAbcabcabcaBcabCab AB  b  b  b |
+     10.00 |abCabcabcabcabcAbcabcabcaBcabCab AB  b  b  b |
+           +^--------------^--------------^--------------+
+            0              5              10             
+#+END_SRC
+
+* stock_multimain 20 Apple and Google 10 day
+Runs the ~stock_multimain~ program on a two actual company stock files
+to see if the correct output is produced. All files have the same
+length in this case.
+
+#+TESTY: program='./stock_multimain 20 data/stock-daily12-aapl_us_d.txt data/stock-daily12-googl_us_d.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  20
+stop_count:  12
+min price:   199.32
+max price:   233.33
+price range: 34.01
+plot step:   1.70
+==LEGEND==
+a : data/stock-daily12-aapl_us_d.txt
+b : data/stock-daily12-googl_us_d.txt
+
+           +------------------------+
+    231.63 |  A a                   |
+    229.93 |  A a a a a           a |
+    228.23 |a A a a a a         a a |
+    226.53 |a A a a a a     a a a a |
+    224.83 |a A a a a a a A a a a a |
+    223.13 |a A a a a a a A a a a a |
+    221.43 |a A a a a a a A a a a a |
+    219.73 |a A a a a a a A a a a a |
+    218.03 |a A a a a a a A a a a a |
+    216.32 |a A a a a a a A a a a a |
+    214.62 |a A a a a a a A a a a a |
+    212.92 |a A a a a a a A a a a a |
+    211.22 |a A a a a a a A a a a a |
+    209.52 |a A a a a a a A a a a a |
+    207.82 |a A a a a a a A a aBa a |
+    206.12 |a A a a a a a A a aBabab|
+    204.42 |a A a a a a a A abaBabab|
+    202.72 |abA abababa a A abaBabab|
+    201.02 |abAbababababa A abaBabab|
+    199.32 |abAbababababaBAbabaBabab|
+           +^---------^---------^---+
+            0         5         10        
+#+END_SRC
+
+* stock_multimain 20 4 company 10 day
+Runs the ~stock_multimain~ program on a four actual company stock
+files to see if the correct output is produced.  All files have the
+same length in this case.
+
+#+TESTY: program='./stock_multimain 20 data/stock-daily10-aapl_us_d.txt data/stock-daily10-googl_us_d.txt data/stock-daily10-nvda_us_d.txt data/stock-daily10-meta_us_d.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  20
+stop_count:  10
+min price:   174.98
+max price:   790.00
+price range: 615.02
+plot step:   30.75
+==LEGEND==
+a : data/stock-daily10-aapl_us_d.txt
+b : data/stock-daily10-googl_us_d.txt
+c : data/stock-daily10-nvda_us_d.txt
+d : data/stock-daily10-meta_us_d.txt
+
+           +----------------------------------------+
+    759.25 |   D   d   d   d   d                    |
+    728.50 |   D   d   d   d   d   d   d   D   d   d|
+    697.75 |   D   d   d   d   d   d   d   D   d   d|
+    667.00 |   D   d   d   d   d   d   d   D   d   d|
+    636.25 |   D   d   d   d   d   d   d   D   d   d|
+    605.49 |   D   d   d   d   d   d   d   D   d   d|
+    574.74 |   D   d   d   d   d   d   d   D   d   d|
+    543.99 |   D   d   d   d   d   d   d   D   d   d|
+    513.24 |   D   d   d   d   d   d   d   D   d   d|
+    482.49 |   D   d   d   d   d   d   d   D   d   d|
+    451.74 |   D   d   d   d   d   d   d   D   d   d|
+    420.99 |   D   d   d   d   d   d   d   D   d   d|
+    390.24 |   D   d   d   d   d   d   d   D   d   d|
+    359.49 |   D   d   d   d   d   d   d   D   d   d|
+    328.74 |   D   d   d   d   d   d   d   D   d   d|
+    297.98 |   D   d   d   d   d   d   d   D   d   d|
+    267.23 |   D   d   d   d   d   d   d   D   d   d|
+    236.48 |   D   d   d   d   d   d   d   D   d   d|
+    205.73 |a  DA  da  da  da  da  da  dA  Dab daB d|
+    174.98 |abCDAbcdabcdabcdabcdabcdaBcdAbCDabcdaBcd|
+           +^-------------------^-------------------+
+            0                   5                   
+#+END_SRC
+
+* stock_multimain 25 3 company varied day
+Runs the ~stock_multimain~ program on a three actual company stock
+files to see if the correct output is produced.  The files have
+different lengths so that some plot bars will be blank for some
+companies at the end of the plot.
+
+#+TESTY: program='./stock_multimain 20 data/stock-daily8-aapl_us_d.txt data/stock-daily12-googl_us_d.txt data/stock-daily10-nvda_us_d.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  20
+stop_count:  12
+min price:   174.98
+max price:   233.33
+price range: 58.35
+plot step:   2.92
+==LEGEND==
+a : data/stock-daily8-aapl_us_d.txt
+b : data/stock-daily12-googl_us_d.txt
+c : data/stock-daily10-nvda_us_d.txt
+
+           +------------------------------------+
+    230.41 |   A  a  a  a  a                    |
+    227.50 |a  A  a  a  a  a                    |
+    224.58 |a  A  a  a  a  a  a  A              |
+    221.66 |a  A  a  a  a  a  a  A              |
+    218.74 |a  A  a  a  a  a  a  A              |
+    215.83 |a  A  a  a  a  a  a  A              |
+    212.91 |a  A  a  a  a  a  a  A              |
+    209.99 |a  A  a  a  a  a  a  A              |
+    207.07 |a  A  a  a  a  a  a  A      B  b  b |
+    204.16 |a  A  a  a  a  a  a  A   b  B  b  b |
+    201.24 |ab Ab ab ab ab ab a  A   b  B  b  b |
+    198.32 |ab Ab ab ab ab ab aB Ab  b  B  b  b |
+    195.40 |ab Ab ab ab ab ab aB Ab  b  B  b  b |
+    192.49 |ab Ab ab ab ab ab aB Ab  b  B  b  b |
+    189.57 |ab Ab ab ab ab ab aB Ab  b  B  b  b |
+    186.65 |ab Ab ab ab ab ab aB Ab  b  B  b  b |
+    183.73 |ab Ab ab ab ab ab aB Ab  b  B  b  b |
+    180.81 |abCAbcabcab abcab aB Ab  b  B  b  b |
+    177.90 |abCAbcabcabcabcab aB Ab  bc Bc b  b |
+    174.98 |abCAbcabcabcabcabcaBcAbC bc Bc b  b |
+           +^--------------^--------------^-----+
+            0              5              10             
+#+END_SRC
+
+* stock_multimain stress
+Plot 20 stock files together to ensure that the program holds up under
+stress. Not all stock files have the same length.
+
+#+TESTY: program='./stock_multimain 15 data/s01.txt data/s02.txt data/s03.txt data/s04.txt data/s05.txt data/s06.txt data/s07.txt data/s08.txt data/s09.txt data/s10.txt data/s11.txt data/s12.txt data/s13.txt data/s14.txt data/s15.txt data/s16.txt data/s17.txt data/s18.txt data/s19.txt data/s20.txt'
+#+BEGIN_SRC sh
+==MULTIPLOT DATA==
+max_height:  15
+stop_count:  10
+min price:   0.00
+max price:   99.00
+price range: 99.00
+plot step:   6.60
+==LEGEND==
+a : data/s01.txt
+b : data/s02.txt
+c : data/s03.txt
+d : data/s04.txt
+e : data/s05.txt
+f : data/s06.txt
+g : data/s07.txt
+h : data/s08.txt
+i : data/s09.txt
+j : data/s10.txt
+k : data/s11.txt
+l : data/s12.txt
+m : data/s13.txt
+n : data/s14.txt
+o : data/s15.txt
+p : data/s16.txt
+q : data/s17.txt
+r : data/s18.txt
+s : data/s19.txt
+t : data/s20.txt
+
+           +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+     92.40 |              o      B   f             T        I  L      S      F                            O                               G i    N                                                              Q   |
+     85.80 |           l  o q    B   f             T  C   g I  L      St     F                     Hi     O    t                        E G i    N                     P    Abc                   c     i       Q   |
+     79.20 |    e      l  o q    B D f h J         T bC   ghI  LM     St    eF h                   Hi   m O    t                        E G i    N                  m  P  s Abc e             s   c     i       Q   |
+     72.60 |    e      l  o q    B D fgh J         T bC   ghIj LM     St    eF h                   Hi   mnO   st                        E Ghi    N                  m  P Rs Abc e             s   c     i     opQ   |
+     66.00 |  c ef     l  opq    B D fgh J   no    T bC   ghIj LM  p  St    eF hi                  Hi   mnO  rst   de            r      EfGhi    N            gh  K m  P Rs Abc e             s  bc     i     opQ   |
+     59.40 |  cdef   j l  opq    B D fgh Jk  no    T bC   ghIj LM  p  St    eF hi  lm    r  a c    Hi  lmnOp rst   de            r      EfGhi k  N            gh  K m  P Rs Abc e   i         s  bc     i     opQ   |
+     52.80 |  cdef   j l  opq    B D fgh Jk  no q  T bC   ghIj LM op rSt    eF hi  lm  pqr  a c   gHi  lmnOp rst   de           qr      EfGhi k mN p     b    gh  K m  P Rs Abc e   i         s  bc   g i     opQ s |
+     46.20 |  cdef   j l  opq    B D fgh Jk  no qr T bC   ghIj LM op rSta   eF hiJ lm  pqr  a cd  gHi  lmnOpqrst   de   i       qr      EfGhi klmN p     b    gh  K m  PqRs Abc e   i  l  op  s  bc   g i     opQ s |
+     39.60 |a cdef   j l  opq    B D fgh Jkl no qrsT bC e ghIjkLM op rSta c eF hiJ lm  pqr  a cd  gHi  lmnOpqrst   de   i       qr      EfGhi klmNop rs  b    gh  K mnoPqRs Abc efg i  lm op  s  bc e g i     opQ s |
+     33.00 |a cdef   j l  opq   aB Defgh Jkl no qrsTabC e ghIjkLM op rStabc eF hiJ lm  pqr  a cd fgHi  lmnOpqrst   de   i  l    qr      EfGhi klmNop rs  b  e gh  K mnoPqRs Abc efg i  lm op  s  bc e g i   m opQ s |
+     26.40 |a cdef   jkl  opq   aB Defgh Jkl no qrsTabC e ghIjkLM opQrStabc eF hiJ lmn pqr  a cd fgHi  lmnOpqrsta  de   i  l   pqrs     EfGhi klmNopqrs  b  e ghi KlmnoPqRs Abc efg i  lm opq s  bc efghi k m opQ s |
+     19.80 |a cdef   jklm opq  taB DefghiJkl no qrsTabC e ghIjkLM opQrStabc eF hiJ lmnOpqrstabcd fgHi  lmnOpqrsta  de g i  lmnopqrs  b  EfGhi klmNopqrs  b  e ghi KlmnoPqRs Abc efg i  lm opq s  bc efghi k m opQ s |
+     13.20 |abcdef   jklm opq  taB DefghiJkl no qrsTabC e ghIjkLM opQrStabc eF hiJ lmnOpqrstabcdEfgHi  lmnOpqrsta cde g i  lmnopqrs  b  EfGhi klmNopqrs  b  e ghi KlmnoPqRs Abc efghi  lm opqrs  bc efghi k m opQ s |
+      6.60 |abcdefgh jklmnopqR taBcDefghiJkl noPqrsTabCDeFghIjkLM opQrStabcdeFGhiJ lmnOpqrstabcdEfgHi klmnOpqrstaBcdefg i  lmnopqrs  b  EfGhi klmNopqrs ab  efghi KlmnoPqRs Abc efghi  lm opqrs abc efghi kLm opQ s |
+      0.00 |abcdefghIjklmnopqRStaBcDefghiJklMnoPqrsTabCDeFghIjkLMNopQrStabcdeFGhiJklmnOpqrstabcdEfgHi klmnOpqrstaBcdefgHi klmnopqrsTAbC EfGhi klmNopqrs abc efghi KlmnoPqRs Abc efghi Klm opqrs abc efghi kLm opQ s |
+           +^---------------------------------------------------------------------------------------------------^---------------------------------------------------------------------------------------------------+
+            0                                                                                                   5                                                                                                   
+#+END_SRC
+
+* stock_multimain open fail 1
+Checks that stock_multimain properly handles the case where a file
+among the stock cannot be opened. Ensures that an error message is
+printed and that memory is de-allocated before returning and exit code
+of 1. In this case the missing file is the first file mentioned.
+
+#+TESTY: exitcode_expect=1
+#+TESTY: program='./stock_multimain 15 data/no-such-file.txt data/s02.txt data/s03.txt data/s04.txt'
+#+BEGIN_SRC sh
+Could not open file 'data/no-such-file.txt', cannot count lines
+Unable to open stock file 'data/no-such-file.txt', cannot load stock data
+Failed to load stock file 0
+Problems loading all stock files, exiting
+#+END_SRC
+
+* stock_multimain open fail 2
+Checks that stock_multimain properly handles the case where a file
+among the stock cannot be opened. Ensures that an error message is
+printed and that memory is de-allocated before returning and exit code
+of 1. In this case the missing file is in the middle of the requested
+files so that any loaded files must be de-allocated before reporting
+the loading function returns.
+
+#+TESTY: exitcode_expect=1
+#+TESTY: program='./stock_multimain 15 data/s01.txt data/s02.txt data/s03.txt data/notaround.txt data/s05.txt'
+#+BEGIN_SRC sh
+Could not open file 'data/notaround.txt', cannot count lines
+Unable to open stock file 'data/notaround.txt', cannot load stock data
+Failed to load stock file 3
+Problems loading all stock files, exiting
+#+END_SRC
+

@@ -1,0 +1,142 @@
+* (TEST 3) set_batt_from_ports() mixed STATUS : ok
+** COMMENTS
+
+
+** Test Segment 1 : ok
+** set_batt_from_ports() mixed STATUS V
+
+*** PROGRAM: ./test_batt_update "set_batt_from_ports() mixed STATUS V"
+To run this individual test in GDB use the command:
+gdb --args ./test_batt_update "set_batt_from_ports() mixed STATUS V"
+but any input to the program must be typed within the debugger
+
+*** FAILURE MESSAGES
+None
+
+*** SIDE-BY-SIDE DIFF of Expected vs Actual
+. lines match; | lines differ; < expected line missing; > extra line in actual
+
+#+BEGIN_SRC sdiff
+===EXPECT===                                                             ===ACTUAL===
+{                                                                      . {
+    // Checks that only bit 4 of BATT_STATUS_PORT is used for          .     // Checks that only bit 4 of BATT_STATUS_PORT is used for
+    // determining the Voltage/Percent mode. Bit 4 is 0 but other bits .     // determining the Voltage/Percent mode. Bit 4 is 0 but other bits
+    // are set in this test                                            .     // are set in this test
+    BATT_VOLTAGE_PORT = 7500;                                          .     BATT_VOLTAGE_PORT = 7500;
+    BATT_STATUS_PORT  = 0b10101001;                                    .     BATT_STATUS_PORT  = 0b10101001;
+    BATT_DISPLAY_PORT = -1;                                            .     BATT_DISPLAY_PORT = -1;
+    batt_t actual = {};            // all 0s                           .     batt_t actual = {};            // all 0s
+    int ret = set_batt_from_ports(&actual);                            .     int ret = set_batt_from_ports(&actual);
+    printf("ret: %d\n",ret);                                           .     printf("ret: %d\n",ret);
+    printf("actual = "); print_batt(actual);                           .     printf("actual = "); print_batt(actual);
+    print_ports();                                                     .     print_ports();
+}                                                                      . }
+---OUTPUT---                                                           . ---OUTPUT---
+ret: 0                                                                 . ret: 0
+actual = {                                                             . actual = {
+  .mlvolts = 3750,                                                     .   .mlvolts = 3750,
+  .percent = 93,                                                       .   .percent = 93,
+  .mode    = 2,                                                        .   .mode    = 2,
+}                                                                      . }
+BATT_VOLTAGE_PORT  : 7500                                              . BATT_VOLTAGE_PORT  : 7500
+BATT_STATUS_PORT   : 101 01001                                         . BATT_STATUS_PORT   : 101 01001
+BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111             . BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111
+index              :  29    24      17      10       3   0             . index              :  29    24      17      10       3   0
+
+#+END_SRC
+
+*** LINE-BY-LINE DIFF of Expected vs Actual
+No differences found
+
+*** VALGRIND REPORT
+The program is run on under valgrind as
+stdbuf -i 0 -o 0 -e 0 valgrind --error-exitcode=13 --leak-check=full --show-leak-kinds=all --track-origins=yes ./test_batt_update set_batt_from_ports() mixed STATUS V
+which may be pasted onto a command line to run it.
+
+#+BEGIN_SRC text
+==48116== Memcheck, a memory error detector
+==48116== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==48116== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==48116== Command: ./test_batt_update set_batt_from_ports()\ mixed\ STATUS\ V
+==48116== 
+==48116== 
+==48116== HEAP SUMMARY:
+==48116==     in use at exit: 0 bytes in 0 blocks
+==48116==   total heap usage: 1 allocs, 1 frees, 4 bytes allocated
+==48116== 
+==48116== All heap blocks were freed -- no leaks are possible
+==48116== 
+==48116== For lists of detected and suppressed errors, rerun with: -s
+==48116== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+#+END_SRC
+
+** Test Segment 2 : ok
+** set_batt_from_ports() mixed STATUS P
+
+*** PROGRAM: ./test_batt_update "set_batt_from_ports() mixed STATUS P"
+To run this individual test in GDB use the command:
+gdb --args ./test_batt_update "set_batt_from_ports() mixed STATUS P"
+but any input to the program must be typed within the debugger
+
+*** FAILURE MESSAGES
+None
+
+*** SIDE-BY-SIDE DIFF of Expected vs Actual
+. lines match; | lines differ; < expected line missing; > extra line in actual
+
+#+BEGIN_SRC sdiff
+===EXPECT===                                                             ===ACTUAL===
+{                                                                      . {
+    // Checks that only bit 4 of BATT_STATUS_PORT is used for          .     // Checks that only bit 4 of BATT_STATUS_PORT is used for
+    // determining the Voltage/Percent mode. Bit 4 is 0 but other bits .     // determining the Voltage/Percent mode. Bit 4 is 0 but other bits
+    // are set in this test                                            .     // are set in this test
+    BATT_VOLTAGE_PORT = 6277;                                          .     BATT_VOLTAGE_PORT = 6277;
+    BATT_STATUS_PORT  = 0b01110110;                                    .     BATT_STATUS_PORT  = 0b01110110;
+    BATT_DISPLAY_PORT = -1;                                            .     BATT_DISPLAY_PORT = -1;
+    batt_t actual = {};            // all 0s                           .     batt_t actual = {};            // all 0s
+    int ret = set_batt_from_ports(&actual);                            .     int ret = set_batt_from_ports(&actual);
+    printf("ret: %d\n",ret);                                           .     printf("ret: %d\n",ret);
+    printf("actual = "); print_batt(actual);                           .     printf("actual = "); print_batt(actual);
+    print_ports();                                                     .     print_ports();
+}                                                                      . }
+---OUTPUT---                                                           . ---OUTPUT---
+ret: 0                                                                 . ret: 0
+actual = {                                                             . actual = {
+  .mlvolts = 3138,                                                     .   .mlvolts = 3138,
+  .percent = 17,                                                       .   .percent = 17,
+  .mode    = 1,                                                        .   .mode    = 1,
+}                                                                      . }
+BATT_VOLTAGE_PORT  : 6277                                              . BATT_VOLTAGE_PORT  : 6277
+BATT_STATUS_PORT   : 011 10110                                         . BATT_STATUS_PORT   : 011 10110
+BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111             . BATT_DISPLAY_PORT  : 111 11111 1111111 1111111 1111111 111
+index              :  29    24      17      10       3   0             . index              :  29    24      17      10       3   0
+
+#+END_SRC
+
+*** LINE-BY-LINE DIFF of Expected vs Actual
+No differences found
+
+*** VALGRIND REPORT
+The program is run on under valgrind as
+stdbuf -i 0 -o 0 -e 0 valgrind --error-exitcode=13 --leak-check=full --show-leak-kinds=all --track-origins=yes ./test_batt_update set_batt_from_ports() mixed STATUS P
+which may be pasted onto a command line to run it.
+
+#+BEGIN_SRC text
+==48167== Memcheck, a memory error detector
+==48167== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==48167== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==48167== Command: ./test_batt_update set_batt_from_ports()\ mixed\ STATUS\ P
+==48167== 
+==48167== 
+==48167== HEAP SUMMARY:
+==48167==     in use at exit: 0 bytes in 0 blocks
+==48167==   total heap usage: 1 allocs, 1 frees, 4 bytes allocated
+==48167== 
+==48167== All heap blocks were freed -- no leaks are possible
+==48167== 
+==48167== For lists of detected and suppressed errors, rerun with: -s
+==48167== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+#+END_SRC
+
+** SUMMARY
+Test Passed
