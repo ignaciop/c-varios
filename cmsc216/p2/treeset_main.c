@@ -1,7 +1,9 @@
 #include "treeset.h"
 
-int main(void) {
-    /*
+#define MAX_CMD_LENGTH 10
+#define MAX_FNAME_LENGTH 128
+
+int main(int argc, char *argv[]) {
     printf("%s\n", "Treeset Main");
     printf("%s\n", "Commands:");
     printf("%s\n", "  print:          shows contents of the tree in reverse sorted order");
@@ -13,64 +15,98 @@ int main(void) {
     printf("%s\n", "  preorder:       prints contents of the tree in pre-order which is how it will be saved");
     printf("%s\n", "  save <file>:    writes the contents of the tree in pre-order to the given file");
     printf("%s\n", "  load <file>:    clears the current tree and loads the one in the given file");
-    */
+    
+    int echo_flag = 0;
+    
+    if (argc > 1 && strcmp("-echo", argv[1]) == 0) {
+        echo_flag = 1;
+    }
+    
+    char cmd_buffer[MAX_CMD_LENGTH];
     
     treeset_t nt;
     
     treeset_init(&nt);
     
-    treeset_insert(&nt, "Lucas");
-    treeset_insert(&nt, "Mike");
-    treeset_insert(&nt, "Dustin");
-    treeset_insert(&nt, "Will");
-    treeset_insert(&nt, "El");
+    while (1) {
+        printf("%s", "TS#> ");
+        
+        scanf("%9s", cmd_buffer);
+        
+        if (strcmp(cmd_buffer, "print") == 0) {
+            if (echo_flag == 1) {
+                printf("%s\n", "print");
+            }
+            
+            treeset_print_revorder(&nt);
+        } else if (strcmp(cmd_buffer, "size") == 0) {
+            int sz = nt.size;
+            
+            if (echo_flag == 1) {
+                printf("%s\n", "size");
+            }
+            
+            printf("%d %s\n", sz, (sz == 1) ? "node": "nodes");
+        } else if (strcmp(cmd_buffer, "clear") == 0) {
+            if (echo_flag == 1) {
+                printf("%s\n", "clear");
+            }
+            
+            treeset_clear(&nt);
+        } else if (strcmp(cmd_buffer, "add") == 0) {
+            char fn_buffer[MAX_FNAME_LENGTH];
+            
+            scanf("%127s", fn_buffer);
+            
+            if (echo_flag == 1) {
+                printf("%s %s\n", "add", fn_buffer);
+            }
+            
+            treeset_insert(&nt, fn_buffer);
+        } else if (strcmp(cmd_buffer, "find") == 0) {
+            char fn_buffer[MAX_FNAME_LENGTH];
+            
+            scanf("%127s", fn_buffer);
+            
+            if (echo_flag == 1) {
+                printf("%s %s\n", "find", fn_buffer);
+            }
+            
+            treeset_find(&nt, fn_buffer);
+        } else if (strcmp(cmd_buffer, "preorder") == 0) {
+            treeset_print_preorder(&nt);
+        } else if (strcmp(cmd_buffer, "save") == 0) {
+            char fn_buffer[MAX_FNAME_LENGTH];
+            
+            scanf("%127s", fn_buffer);
+            
+            if (echo_flag == 1) {
+                printf("%s %s\n", "save", fn_buffer);
+            }
+            
+            treeset_save(&nt, fn_buffer);
+        } else if (strcmp(cmd_buffer, "load") == 0) {
+            char fn_buffer[MAX_FNAME_LENGTH];
+            
+            scanf("%127s", fn_buffer);
+            
+            if (echo_flag == 1) {
+                printf("%s %s\n", "load", fn_buffer);
+            }
+            
+            treeset_load(&nt, fn_buffer);
+        } else if (strcmp(cmd_buffer, "quit") == 0) {
+            if (echo_flag == 1) {
+                printf("%s\n", "quit");
+            }
+            
+            treeset_clear(&nt);
+            
+            break;
+        } else {
+            continue;
+        }
+    }
     
-    printf("%d nodes\n", nt.size);
-    
-    treeset_print_revorder(&nt);
-    treeset_print_preorder(&nt);
-    
-    int fm = treeset_find(&nt, "Mike");
-    printf("%s FOUND\n", (fm == 1) ? "\b" : "NOT");
-    
-    fm = treeset_find(&nt, "Nancy");
-    printf("%s FOUND\n", (fm == 1) ? "\b\b" : "NOT");
-    
-    treeset_insert(&nt, "Nancy");
-    
-    printf("%d nodes\n", nt.size);
-    
-    treeset_print_revorder(&nt);
-    
-    treeset_insert(&nt, "Mike");
-    treeset_insert(&nt, "El");
-    
-    fm = treeset_find(&nt, "Max");
-    printf("%s FOUND\n", (fm == 1) ? "\b\b" : "NOT");
-    
-    treeset_insert(&nt, "Max");
-    
-    treeset_print_revorder(&nt);
-    
-    fm = treeset_find(&nt, "Max");
-    printf("%s FOUND\n", (fm == 1) ? "\b\b" : "NOT");
-    
-    fm = treeset_find(&nt, "Barb");
-    printf("%s FOUND\n", (fm == 1) ? "\b\b" : "NOT");
-    
-    treeset_insert(&nt, "Barb");
-    
-    treeset_print_revorder(&nt);
-    
-    treeset_save(&nt, "data/stranger2.tree");
-    
-    printf("%s\n", "****************");
-    
-    treeset_load(&nt, "data/stranger.tree");
-    
-    treeset_print_revorder(&nt);
-    
-    treeset_clear(&nt);
-
     return EXIT_SUCCESS;
 }

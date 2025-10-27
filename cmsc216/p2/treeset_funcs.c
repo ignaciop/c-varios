@@ -20,7 +20,7 @@ int treeset_insert(treeset_t *tree, char name[]) {
         }
         
         strncpy(new_node->name, name, sizeof(new_node->name) - 1);
-        new_node->name[sizeof(new_node->name) - 1] = '\0'; // ensure null termination
+        new_node->name[sizeof(new_node->name) - 1] = '\0'; /* ensure null termination */
         
         new_node->left = NULL;
         new_node->right = NULL;
@@ -40,10 +40,13 @@ int treeset_insert(treeset_t *tree, char name[]) {
             int cmp = strcmp(name, current->name);
 
             if (cmp == 0) {
-                // Duplicate found — don't insert
+                /* Duplicate found — don't insert */
                 free(new_node);
+                new_node = NULL;
                 
                 inserted = 0;
+                
+                printf("%s\n", "duplicate element ignored");
                 
                 goto exit_tag;
             }
@@ -57,7 +60,7 @@ int treeset_insert(treeset_t *tree, char name[]) {
             }
         }
 
-        // Insert new node as child of parent
+        /* Insert new node as child of parent */
         if (strcmp(name, parent->name) < 0) {
             parent->left = new_node;
         } else {
@@ -95,16 +98,18 @@ int treeset_find(treeset_t *tree, char name[]) {
         }
     }
     
+    printf("%s\n", (found == 0) ? "NOT FOUND" : "FOUND");
+    
     return found;
 }
 
 void treeset_clear(treeset_t *tree) {
     if (tree != NULL) {
         tsnode_remove_all(tree->root);
+        
+        tree->root = NULL;
+        tree->size = 0;
     }
-    
-    tree->root = NULL;
-    tree->size = 0;
 }
 
 void treeset_print_revorder(treeset_t *tree) {
@@ -138,9 +143,9 @@ void treeset_save(treeset_t *tree, char *fname) {
 int treeset_load(treeset_t *tree, char *fname) {
     int loaded = 0;
     
-    treeset_clear(tree);
-    
     if (tree != NULL && fname != NULL) {
+        treeset_clear(tree);
+        
         FILE *fp = fopen(fname, "r");
         
         if (fp == NULL) {
@@ -151,7 +156,7 @@ int treeset_load(treeset_t *tree, char *fname) {
         
         char temp_name[128];
         
-        while (fscanf(fp, "%127s\n", temp_name) == 1) {
+        while (fscanf(fp, "%127s", temp_name) == 1) {
             treeset_insert(tree, temp_name);
         }
         
@@ -179,25 +184,27 @@ void tsnode_print_revorder(tsnode_t *cur, int indent) {
     if (cur != NULL) {
         tsnode_print_revorder(cur->right, indent + 1);
 
-        // 2. Print current node (with indentation)
-        for (int i = 0; i < indent; i++) {
-            printf("  "); // two spaces per indent level
+        if (cur->name[0] != '\0') {
+            for (int i = 0; i < indent; i++) {
+                printf("  ");
+            }
+            
+            printf("%s\n", cur->name);
         }
-        
-        printf("%s\n", cur->name);
 
-        // 3. Traverse left subtree
         tsnode_print_revorder(cur->left, indent + 1);
     }
 }
 
 void tsnode_write_preorder(tsnode_t *cur, FILE *out, int depth) {
     if (cur != NULL && out != NULL) {
-        for (int i = 0; i < depth; ++i) {
-            fprintf(out, "%s", "  ");
-        }
+        if (cur->name[0] != '\0') {
+            for (int i = 0; i < depth; ++i) {
+                fprintf(out, "%s", "  ");
+            }
         
-        fprintf(out, "%.127s\n", cur->name);
+            fprintf(out, "%.127s\n", cur->name);
+        }
         
         tsnode_write_preorder(cur->left, out, depth + 1);
         tsnode_write_preorder(cur->right, out, depth + 1);
