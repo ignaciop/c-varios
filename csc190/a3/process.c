@@ -1,308 +1,318 @@
 /* 
  * process.c
  * implements a binary tree, uses it for making a process tree
- * Ignacio Poggi, 20240903
+ * Ignacio Poggi, 20251028
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include "process.h"
 
 struct process *make_process(int pid, int mem_used) {
-    assert(pid >= 0);
-    assert(mem_used > 0);
+    struct process *np = NULL;
     
-    struct process *new_proc = (struct process *)malloc(sizeof(struct process));
-    
-    if (new_proc == NULL) {
-        perror("Cannot allocate memory for new process");
+    if (pid >= 0 && mem_used > 0) {
+        np = (struct process *)malloc(sizeof(struct process));
         
-        exit(EXIT_FAILURE);
+        if (np == NULL) {
+            perror("Cannot allocate memory for new process.\n");
+            
+            exit(EXIT_FAILURE);
+        }
+        
+        np->pid = pid;
+        np->mem_used = mem_used;
+        np->left = NULL;
+        np->right = NULL;
     }
     
-    new_proc->pid = pid;
-    new_proc->mem_used = mem_used;
-    new_proc->left = NULL;
-    new_proc->right = NULL;
-    
-    return new_proc;
+    return np;
 }
 
 static void helper_print_postorder(struct process *root) {
-	/* Recursively prints a binary tree using postorder traversal */
-	/* PRE: none */
-	/* POST: none */
-	if (root != NULL) {
-		helper_print_postorder(root->left);
-		helper_print_postorder(root->right);
-		print_process(root);
-	}
+    if (root != NULL) {
+        helper_print_postorder(root->left);
+        helper_print_postorder(root->right);
+        
+        printf("%d ", root->pid);
+    }
 }
 
 void print_postorder(struct process *root) {
     printf("%s", "Postorder: ");
-	
-	helper_print_postorder(root);
-	
-	printf("\n");
+    
+    helper_print_postorder(root);
+    
+    printf("\n");
 }
 
 static void helper_print_inorder(struct process *root) {
-	/* Recursively prints a binary tree using inorder traversal */
-	/* PRE: none */
-	/* POST: none */
-	if (root != NULL) {
-	    helper_print_inorder(root->left);
-		print_process(root);
-		helper_print_inorder(root->right);
-	}
+    if (root != NULL) {
+        helper_print_inorder(root->left);
+        
+        printf("%d ", root->pid);
+        
+        helper_print_inorder(root->right);
+    }
 }
 
 void print_inorder(struct process *root) {
-	/* Prints a binary tree using inorder traversal */
-	/* PRE: none */
-	/* POST: none */
-	printf("%s", "Inorder: ");
-	
-	helper_print_inorder(root);
-	
-	printf("\n");
-}
-
-static void print_given_level(struct process *root, int level) {
-    if (root == NULL) {
-        return;
-    }
+    printf("%s", "Inorder: ");
     
-    if (level == 1) {
-        printf("%d ", root->pid);
-    } else {
-        print_given_level(root->left, level - 1);
-        print_given_level(root->right, level - 1);
-    }
+    helper_print_inorder(root);
+    
+    printf("\n");
 }
 
 static int height(struct process *root) {
-    if (root == NULL) {
-        return 0;
+    int h = 0;
+    
+    if (root != NULL) {
+        int lh = height(root->left);
+        int rh = height(root->right);
+        
+        int max = (lh > rh) ? lh : rh;
+        
+        h = 1 + max;
     }
-    
-    int leftHeight = height(root->left);
-    int rightHeight = height(root->right);
-    
-    int h = (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
     
     return h;
 }
 
-static void helper_print_levelorder(struct process *root, int currentLevel, int maxLevel) {
-	/* Recursively prints a binary tree using levelorder traversal */
-	/* PRE: none */
-	/* POST: none */
-	if (currentLevel > maxLevel) {
-	    return;
-	}
-	
-	print_given_level(root, currentLevel);
-	
-    helper_print_levelorder(root, currentLevel + 1, maxLevel);
+static void print_level(struct process *root, int level) {
+    if (root != NULL) {
+        if (level == 1) {
+            printf("%d ", root->pid);
+        } else {
+            print_level(root->left, level - 1);
+            print_level(root->right, level - 1);
+        }
+    }
+}
+
+static void print_levels(struct process *root, int curr_level, int height) {
+    if (curr_level <= height) {
+        print_level(root, curr_level);
+        
+        print_levels(root, curr_level + 1, height);
+    }
 }
 
 void print_levelorder(struct process *root) {
-    /* Prints a binary tree using levelorder traversal */
-	/* PRE: none */
-	/* POST: none */
-	printf("%s", "Levelorder: ");
-	
-	int h = height(root);
-	helper_print_levelorder(root, 1, h);
-	
-	printf("\n");
+    printf("%s", "Levelorder: ");
+    
+    int h = height(root);
+    
+    print_levels(root, 1, h);
+    
+    printf("\n");
 }
 
 int num_nodes(struct process *root) {
-    int nn = 0;
+    int total_nodes = 0;
     
     if (root != NULL) {
-        int ln = num_nodes(root->left);
-        int rn = num_nodes(root->right);
-        
-        nn = ln + rn + 1;
+        total_nodes += 1 + num_nodes(root->left) + num_nodes(root->right);
     }
     
-    return nn;
+    return total_nodes;
 }
 
-int is_complete(struct process *root) {
-    int complete = 0;
-    
-    if (root == NULL) {
-        complete = 1;
-        
-        return complete;
-    }
-    
-    int h1 = height(root->left);
-    int h2 = height(root->right);
-    
-    if (h1 == h2 || h1 == h2 + 1) {
-        complete = 1;
-    }
-    
-    return (complete && is_complete(root->left) && is_complete(root->right));
-}
-
-static void helper_remove_all(struct process *root) {
-    if (root == NULL) {
-        return;
-    }
-    
-    helper_remove_all(root->left);
-    helper_remove_all(root->right);
-        
-    free(root);
-    root = NULL;
-}
-
-void remove_all(struct process **root) {
-    /* Check first if address is valid */
-    if (root == NULL) {
-        return;
-    }
-    
-    /* Proceed to recursively remove actual root node */
-    helper_remove_all(*root);
-    
-    /* Leave pointer to root node as NULL */
-    *root = NULL;
-}
-
-int contains_pid(struct process *root, int value) {
-    int cp = 0;
+static int helper_is_complete(struct process *root, int index, int total) {
+    int cmp = 1;
     
     if (root != NULL) {
-        if (root->pid == value) {
-            cp = 1;
+        if (index < total) {
+            cmp = helper_is_complete(root->left, 2 * index + 1, total) &&
+                    helper_is_complete(root->right, 2 * index + 2, total);
         } else {
-            cp = contains_pid(root->left, value) || contains_pid(root->right, value);
+            cmp = 0;
         }
     }
     
-    return cp;
+    return cmp;
+}
+
+int is_complete(struct process *root) {
+    int complete = 1;
+    
+    if (root != NULL) {
+        int nodes = num_nodes(root);
+        
+        complete = helper_is_complete(root, 0, nodes);
+    }
+    
+    return complete;
+}
+
+void remove_all(struct process **root) {
+    if (root != NULL && *root != NULL) {
+        remove_all(&(*root)->left);
+        remove_all(&(*root)->right);
+        
+        free(*root);
+        *root = NULL;
+    }
+}
+
+int contains_pid(struct process *root, int value) {
+    int is_contained = 0;
+    
+    if (root != NULL) {
+        if (root->pid == value) {
+            is_contained = 1;
+        } else {
+            is_contained = contains_pid(root->left, value) || contains_pid(root->right, value);
+        }
+    }
+    
+    return is_contained;
 }
 
 int total_mem(struct process *root) {
-    int sum_tm = 0;
+    int tm = 0;
     
     if (root != NULL) {
-        sum_tm += root->mem_used + total_mem(root->left) + total_mem(root->right);
+        tm += root->mem_used + total_mem(root->left) + total_mem(root->right);
     }
     
-    return sum_tm;
+    return tm;
 }
 
 int can_add(struct process *root, struct process *new_node, int max_mem) {
-    assert(new_node != NULL);
+    int ca = 0;
     
-    int cp = contains_pid(root, new_node->pid);
-    int tm = total_mem(root) + new_node->mem_used;
-    
-    int ca = !cp && (tm <= max_mem);
+    if (new_node != NULL) {
+        int not_contained = (contains_pid(root, new_node->pid) == 0);
+        int tm_pnode = total_mem(root) + new_node->mem_used;
+        
+        ca = not_contained && (tm_pnode <= max_mem);
+    }
     
     return ca;
 }
 
-
-/* Function to insert a node in level-order */
-void insert_levelorder(struct process** root, struct process* to_add, int max_mem) {
-    assert(can_add(*root, to_add, max_mem));
-
-    if (*root == NULL) {
-        *root = to_add;
-        return;
-    }
+static int insert_at_level(struct process *root, struct process *to_add, int level) {
+    int ial = 0;
     
-    struct queue *q = NULL;
-    enqueue(*root, &q);
-    
-    while(peek(&q) != NULL) {
-        struct process *temp = peek(&q)->proc;
-        dequeue(&q);
-        
-        if (temp->left == NULL) {
-            temp->left = to_add;
-            return;
-        } else if (temp->right == NULL) {
-            temp->right = to_add;
-            return;
+    if (root != NULL) {
+        if (level == 1) {
+            if (root->left == NULL) {
+                root->left = to_add;
+                
+                ial = 1;
+            } else if (root->right == NULL) {
+                root->right = to_add;
+                
+                ial = 1;
+            }
         } else {
-            enqueue(temp->left, &q);
-            enqueue(temp->right, &q);
+            if (insert_at_level(root->left, to_add, level - 1)) {
+                ial = 1;
+            }
             
-            //struct process *n = (dequeue(&q));
-            //insert_levelorder(&n, to_add, max_mem);  
+            if (insert_at_level(root->right, to_add, level - 1)) {
+                ial = 1;
+            }
         }
     }
     
-    assert(is_complete(*root));
+    return ial;
 }
 
+static void helper_insert_level(struct process *root, struct process *to_add, int level, int max_level, int *inserted) {
+    if (*inserted == 0 && level <= max_level && insert_at_level(root, to_add, level)) {
+        *inserted = 1;
+        
+        helper_insert_level(root, to_add, level + 1, max_level, inserted);
+    }
+}
+
+void insert_levelorder(struct process **root, struct process *to_add, int max_mem) {
+    if (root != NULL) {
+        int ca = can_add(*root, to_add, max_mem);
+        
+        if (ca == 1) {
+            if (*root == NULL) {
+                *root = to_add;
+            } else {
+                int h = height(*root);
+                int inserted = 0;
+                
+                helper_insert_level(*root, to_add, 1, h + 1, &inserted);
+            }
+        }
+    }
+}
 
 struct process *create_tree(int first_pid, int max_mem, int mem_per_proc, int num_nodes) {
-    struct process *root = make_process(first_pid, mem_per_proc);
+    struct process *first = make_process(first_pid, mem_per_proc);
     
-    for (int i = 1; i < num_nodes; i++) {
-        struct process *child = make_process(first_pid + i, mem_per_proc);
+    if (num_nodes > 1) {
+        struct process *next = create_tree(first_pid + 1, max_mem, mem_per_proc, num_nodes - 1);
         
-        insert_levelorder(&root, child, max_mem);
+        insert_levelorder(&first, next, max_mem);
+    } else {
+        insert_levelorder(NULL, first, max_mem);
     }
     
-    return root;
+    return first;
 }
 
-// Helper function to check if the tree is sorted in level-order
-static int is_sorted_recursive(struct process *node, int *last_pid) {
-    if (node == NULL) {
-        return 1; // An empty subtree is considered sorted
-    }
-
-    // Check if current node's PID is greater than the last seen PID
-    if (node->pid <= *last_pid) {
-        return 0; // Tree is not sorted
-    }
-    
-    // Update the last seen PID
-    *last_pid = node->pid;
-    
-    int is = is_sorted_recursive(node->left, last_pid) && is_sorted_recursive(node->right, last_pid);
-
-    // Recursively check left and right children
-    return is;
+void sorted_recursive(struct queue **btqueue, int lastvalue, int* not_sorted) {
+	/* Traverse the tree lengthwise. If the last value is smaller than the current, we are sorted. Else, we are not. */
+	int thisvalue;
+	
+	if (*btqueue == NULL) {
+		return;
+	}
+	
+	struct process *node = dequeue(btqueue);
+	
+	if(node == NULL) {
+		return;
+	}
+	
+	thisvalue = node->pid;
+	
+	if(thisvalue < lastvalue) {
+		*not_sorted = 1;
+	}
+	
+	if(node->left) {
+		enqueue(node->left, btqueue);
+	}
+	
+	if(node->right) {
+		enqueue(node->right, btqueue);
+	}
+	
+	sorted_recursive(btqueue, thisvalue, not_sorted);
 }
 
-// Wrapper function for is_sorted
 int is_sorted(struct process *root) {
-    if (root == NULL) {
-        return 1; // An empty subtree is considered sorted
-    }
-    
-    int last_pid = -1; // Initialize to a value less than any possible PID
-    
-    struct process *child = root->left;
-    
-    int is = is_sorted_recursive(root, &last_pid);
-    
-    return is;
+	/* Use a queue - verify that the next element in the queue is larger than our preceding (or null). */
+	struct queue *pointme = NULL;
+	struct queue **bt_queue = &pointme;
+	enqueue(root, bt_queue);
+	
+	int unsorted = 0;
+	int *not_sorted = &unsorted;
+	
+	sorted_recursive(bt_queue, 0, not_sorted);
+	
+	if (unsorted) {
+		return 0;
+	} else {
+		return 1;
+	}
 }
 
 struct process *get_min(struct process *root, int smallest_val) {
-    //assert(is_sorted(root));
-    
     struct process *proc_min = NULL;
     
-    if (root != NULL) {
+    if (root != NULL && is_sorted(root) == 1) {
         /* If the current node's pid is greater than or equal to smallest_val, it's a valid candidate */
         if (root->pid >= smallest_val) {
             proc_min = root;
@@ -332,240 +342,12 @@ struct process *get_min(struct process *root, int smallest_val) {
     return proc_min;
 }
 
-/* Helper function to collect all nodes in level order */
-static void collect_nodes(struct process *root, struct process **nodes, int *index) {
-    if (root == NULL) {
-        return;
-    }
-
-    struct queue *front = NULL;
-    enqueue(root, &front);
-
-    while (front != NULL) {
-        struct process *current = dequeue(&front);
-        
-        if (current != NULL) {
-            nodes[*index] = current;
-            (*index)++;
-            
-            enqueue(current->left, &front);
-            enqueue(current->right, &front);
-        }
-    }
-}
-
-/* Helper function to rebuild the tree using sorted nodes */
-static struct process* rebuild_from_sorted_nodes(struct process **nodes, int num_nodes) {
-    if (num_nodes == 0) {
-        return NULL;
-    }
-
-    struct process *root = nodes[0];
-    struct queue *front = NULL;
-    enqueue(root, &front);
-    int index = 1;
-
-    while (index < num_nodes) {
-        struct process *current = dequeue(&front);
-
-        if (index < num_nodes) {
-            current->left = nodes[index++];
-            enqueue(current->left, &front);
-        }
-        
-        if (index < num_nodes) {
-            current->right = nodes[index++];
-            enqueue(current->right, &front);
-        }
-    }
-
-    return root;
-}
-
 int rebuild_tree(struct process **root) {
-     if (is_complete(*root) && is_sorted(*root)) {
-        return 0;  /* Tree is already complete and sorted in level order */
-    }
-
-    /* Collect all nodes in level order */
-    int total_nodes = num_nodes(*root);
-    
-    struct process *nodes[total_nodes];
-    int index = 0;
-    
-    collect_nodes(*root, nodes, &index);
-
-    /* Sort nodes by pid (in ascending order) */
-    for (int i = 0; i < total_nodes - 1; i++) {
-        for (int j = i + 1; j < total_nodes; j++) {
-            if (nodes[i]->pid > nodes[j]->pid) {
-                struct process *temp = nodes[i];
-                
-                nodes[i] = nodes[j];
-                nodes[j] = temp;
-            }
-        }
-    }
-
-    /* Rebuild the tree from the sorted nodes */
-    *root = rebuild_from_sorted_nodes(nodes, total_nodes);
-
-    return 1;  // The tree has been rebuilt
-}
-
-/* Helper function to replace a node with its rightmost child */
-static void replace_with_rightmost(struct process **root, struct process *node_to_delete) {
-    /* Collect nodes in level-order */
-    struct process *nodes[256];
-    int index = 0;
-    collect_nodes(*root, nodes, &index);
-
-    /* Find the last node (rightmost leaf node) */
-    struct process *last_node = nodes[index - 1];
-
-    /* Replace the node_to_delete with last_node */
-    if (node_to_delete == *root) {
-        *root = last_node;
-    } else {
-        struct queue *front = NULL;
-        enqueue(*root, &front);
-        
-        while (front != NULL) {
-            struct process *current = dequeue(&front);
-            
-            if (current != NULL) {
-                if (current->left == node_to_delete) {
-                    current->left = NULL;
-                    break;
-                } else if (current->right == node_to_delete) {
-                    current->right = NULL;
-                    break;
-                }
-                
-                enqueue(current->left, &front);
-                enqueue(current->right, &front);
-            }
-        }
-    }
-
-    /* Set the last node's left and right children to NULL (as it's a leaf) */
-    last_node->left = NULL;
-    last_node->right = NULL;
+    return 0;
 }
 
 int kill(struct process **root, int pid) {
-    if (*root == NULL) {
-        return 0;  /* Tree is empty */
-    }
-
-    struct process *node_to_delete = NULL;
-    struct queue *front = NULL;
-    enqueue(*root, &front);
-
-    /* Find the node to be deleted (level-order traversal) */
-    while (front != NULL) {
-        struct process *current = dequeue(&front);
-        
-        if (current != NULL) {
-            if (current->pid == pid) {
-                node_to_delete = current;
-                
-                break;
-            }
-            
-            enqueue(current->left, &front);
-            enqueue(current->right, &front);
-        }
-    }
-
-    if (node_to_delete == NULL) {
-        return 0;  /* Node with the given PID not found */
-    }
-
-    /* Handle different deletion cases */
-    struct process *parent = NULL;
-    
-    if (node_to_delete == *root) {
-        /* Special case: if the node to delete is the root */
-        *root = NULL;
-    } else {
-        struct queue *front = NULL;
-        enqueue(*root, &front);
-        
-        while (front != NULL) {
-            struct process *current = dequeue(&front);
-            
-            if (current != NULL) {
-                if (current->left == node_to_delete) {
-                    parent = current;
-                    current->left = NULL;
-                    
-                    break;
-                } else if (current->right == node_to_delete) {
-                    parent = current;
-                    current->right = NULL;
-                    
-                    break;
-                }
-                
-                enqueue(current->left, &front);
-                enqueue(current->right, &front);
-            }
-        }
-    }
-
-    /* Replace the deleted node with the last node in the tree */
-    if (node_to_delete != *root) {
-        replace_with_rightmost(root, node_to_delete);
-    }
-
-    /* Free the memory of the deleted node */
-    free(node_to_delete);
-    node_to_delete = NULL;
-
-    /* Rebuild the tree to ensure it's complete and sorted */
-    /* Collect all nodes in level-order and then sort them by PID */
-    int total_nodes = num_nodes(*root);
-    struct process *nodes[total_nodes];
-    int index = 0;
-    
-    collect_nodes(*root, nodes, &index);
-
-    /* Sort nodes by PID in ascending order (bubble sort or any efficient algorithm can be used) */
-    for (int i = 0; i < total_nodes - 1; i++) {
-        for (int j = i + 1; j < total_nodes; j++) {
-            if (nodes[i]->pid > nodes[j]->pid) {
-                struct process *temp = nodes[i];
-                
-                nodes[i] = nodes[j];
-                nodes[j] = temp;
-            }
-        }
-    }
-
-    /* Rebuild the tree from the sorted nodes */
-    struct process *new_root = nodes[0];
-    struct queue *q = NULL;
-    enqueue(new_root, &q);
-    
-    index = 1;
-
-    while (index < total_nodes) {
-        struct process *current = dequeue(&q);
-        
-        if (index < total_nodes) {
-            current->left = nodes[index++];
-            enqueue(current->left, &q);
-        }
-        
-        if (index < total_nodes) {
-            current->right = nodes[index++];
-            enqueue(current->right, &q);
-        }
-    }
-
-    /* Set the new tree root */
-    *root = new_root;
-
-    return 1;  /* Successfully deleted and the tree is now complete and sorted */
+    return 0;
 }
+
+

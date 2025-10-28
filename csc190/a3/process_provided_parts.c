@@ -105,7 +105,7 @@ struct process* dequeue(struct queue **front) {
 	
 	struct process *ret = to_return->proc;
 
-	to_return -> next = NULL;
+	to_return->next = NULL;
 	
 	free(to_return);
 	to_return = NULL;

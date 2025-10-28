@@ -1,19 +1,19 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-struct process{
+struct process {
 	int pid; /* must be unique */	
 	int mem_used; /* memory_used must not exceed MAX_MEM */
 	struct process *left;
 	struct process *right;
 };
 
-struct stack{
+struct stack {
 	struct process *proc;
 	struct stack *next; /* singly linked list */
 };
 
-struct queue{
+struct queue {
 	struct process *proc;
 	struct queue *next; /* singly-linked */
 };
